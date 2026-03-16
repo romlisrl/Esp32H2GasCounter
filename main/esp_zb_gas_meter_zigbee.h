@@ -4,7 +4,7 @@
 #include "zcl/esp_zigbee_zcl_power_config.h"
 #include "zcl/esp_zigbee_zcl_metering.h"
 
-// Initial value for the counter, in case it's not found in NVS
+// Initial value for the counter 2134 will be 21.34 m3
 #define INITIAL_COUNTER_VALUE 0
 
 // Maximum time to force a device report

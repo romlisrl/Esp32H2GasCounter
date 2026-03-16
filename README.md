@@ -56,7 +56,7 @@
 |----------------------------|----------------------------------------------------------------|
 | `MUST_SYNC_MINIMUM_TIME`   | Time between automatic transmissions (timer default 60m)       |
 | `COUNTER_REPORT_DIFF`      | Number of pulses to trigger immediate transmission (default 10)|
-| `INITIAL_COUNTER_VALUE`    | Initial value for the counter                                  |
+| `INITIAL_COUNTER_VALUE`    | Initial value for the counter (2134 will be 21.34 m3)          |
 
 ---
 
