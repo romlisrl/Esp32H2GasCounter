@@ -73,7 +73,7 @@ Data is transmitted either periodically (timer) or when a predefined number of a
 ```text
 GAS_COUNTER: Counter loaded pulses=160
 GAS_COUNTER: Setup deep sleep
-GAS_COUNTER: Wake up from GAS PULSE...
+GAS_COUNTER: Wake up from PULSE.
 GAS_COUNTER: Checking if Zigbee radio should be enabled
 GAS_COUNTER: Counter stored pulses=161
 GAS_COUNTER: Configuring wake-up methods

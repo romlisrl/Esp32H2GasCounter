@@ -886,7 +886,7 @@ esp_err_t gm_deep_sleep_init()
             if ((ext1mask & gpio_pulse_pin_mask) == gpio_pulse_pin_mask)
             { 
                 // wakeup from PULSE_PIN
-                ESP_LOGI(TAG, "Wake up from GAS PULSE...");
+                ESP_LOGI(TAG, "Wake up from PULSE.");
                 int level = gpio_get_level(PULSE_PIN);
 
                 if (!exception_pulse_button_on_hold)
