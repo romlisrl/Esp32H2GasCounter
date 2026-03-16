@@ -25,7 +25,7 @@ Data is transmitted either periodically (timer) or when a predefined number of a
 
 - ESP32H2 board  
 - Gas meter with pulse output (e.g., BK-G4MT or similar)  
-- Reed sensor 
+- Reed sensor: **Normally Open (NO)** – tested with GPS-01 Reed Switch 4×18 (Aliexpress)
 - Optional battery  
 
 ---
