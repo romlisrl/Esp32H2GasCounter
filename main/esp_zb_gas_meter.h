@@ -50,8 +50,8 @@
 //#define CONFIG_EXTERNAL_ANTENNA
 
 // ESP32H2 — GPIO strapping pin warnings:
-//   GPIO 8  — strapping (controls ROM log output)  <- was LED_PIN on C6
-//   GPIO 9  — strapping (HIGH=normal, LOW=download mode) <- was MAIN_BTN on C6
+//   GPIO 8  — strapping (controls LED)  <- was LED_PIN on C6
+//   GPIO 9  — strapping (HIGH=normal, LOW=download mode)
 // Using strapping pins after boot is possible but may cause issues.
 // Remapped to safe pins below.
 
@@ -59,8 +59,8 @@
 #define PULSE_PIN                                               GPIO_NUM_10
 
 // input - pin for the main button
-// CHANGED: GPIO_NUM_9 -> GPIO_NUM_4  (GPIO 9 is BOOT/strapping pin on ESP32H2)
-#define MAIN_BTN                                                GPIO_NUM_12
+// (GPIO 9 is BOOT/strapping pin on ESP32H2)
+#define MAIN_BTN                                                GPIO_NUM_9
 
 // output - pin to enable battery voltage monitoring
 // NOTE: ESP32H2 has NO ADC. FEATURE_MEASURE_BATTERY_LEVEL must stay disabled.
