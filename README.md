@@ -15,6 +15,7 @@ Data is transmitted either periodically (timer) or when a predefined number of a
 - Sends data to **Zigbee2MQTT**:  
   - On a configurable timer  
   - When accumulated pulses reach a threshold  
+  - Pressing embedded **Boot button**
 - Supports **deep sleep** for low power.  
 - LED or GPIO status indication.  
 
