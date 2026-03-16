@@ -52,11 +52,11 @@
 
 ## Configuration
 
-| Parameter                  | Description                                                |
-|----------------------------|------------------------------------------------------------|
-| `MUST_SYNC_MINIMUM_TIME`   | Time between automatic transmissions (timer)               |
-| `COUNTER_REPORT_DIFF`      | Number of pulses to trigger immediate transmission         |
-|                            |                                                            |
+| Parameter                  | Description                                                    |
+|----------------------------|----------------------------------------------------------------|
+| `MUST_SYNC_MINIMUM_TIME`   | Time between automatic transmissions (timer default 60m)       |
+| `COUNTER_REPORT_DIFF`      | Number of pulses to trigger immediate transmission (default 10)|
+|                            |                                                                |
 
 ---
 
