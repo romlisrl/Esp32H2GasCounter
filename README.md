@@ -54,7 +54,7 @@
 
 | Parameter                  | Description                                                |
 |----------------------------|------------------------------------------------------------|
-| `MUST_SYNC_MINIMUM_TIME`   | Time between automatic transmissions (ms)                 |
+| `MUST_SYNC_MINIMUM_TIME`   | Time between automatic transmissions (timer)               |
 | `COUNTER_REPORT_DIFF`      | Number of pulses to trigger immediate transmission        |
 | `PULSE_PIN`                | Connected reed sensor (GPIO10)                             |
 
