@@ -186,7 +186,7 @@ void save_counter_task(void *arg)
         {
             nvs_commit(my_nvs_handle);
             //ESP_LOGI(TAG, "Counter stored: low=%lu high=%d", current_summation_delivered.low, current_summation_delivered.high);
-            ESP_LOGI(TAG, "Counter stored value=%lu", current_summation_delivered.low);
+            ESP_LOGI(TAG, "Counter updated value=%lu", current_summation_delivered.low);
             #ifdef FEATURE_DEEP_SLEEP
             if (deep_sleep_task_handle != NULL)
             {
@@ -948,7 +948,7 @@ esp_err_t gm_deep_sleep_init()
         if (report_time_s > MUST_SYNC_MINIMUM_TIME)
             report_time_s = MUST_SYNC_MINIMUM_TIME;
         const uint64_t wakeup_time_sec = MUST_SYNC_MINIMUM_TIME - report_time_s;
-        ESP_LOGI(TAG, "Enabling wake-up timer , %llds", wakeup_time_sec);
+        ESP_LOGI(TAG, "Enabling wake-up timer , %lld m", wakeup_time_sec / 60);
         ESP_ERROR_CHECK(esp_sleep_enable_timer_wakeup((wakeup_time_sec < 10 ? 10 : wakeup_time_sec) * 1000000));
 
         /* PULSE_PIN and MAIN_BTN wake up on pull up */       
