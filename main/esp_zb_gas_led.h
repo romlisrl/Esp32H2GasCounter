@@ -1,4 +1,4 @@
-// Seeedstudio yellow pin (ESP32C6)
+// Seedstudio yellow pin (ESP32C6)
 //#define LED_PIN GPIO_NUM_15
 
 // ESP32H2: GPIO 8 

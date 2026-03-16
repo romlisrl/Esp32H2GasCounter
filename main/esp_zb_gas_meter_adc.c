@@ -30,7 +30,7 @@ uint8_t battery_voltage_th1 = UINT8_C(WARN_BATTERY_VOLTAGE/100);
 
 struct timeval last_battery_measurement_time;
 
-adc_channel_t channel = ADC_CHANNEL; // ADC_CHANNEL_3 is a better option, but the current board was using 0 so let's change it now GPIO 3
+adc_channel_t channel = ADC_CHANNEL;
 adc_continuous_handle_t handle = NULL;
 
 void set_battery_unavailable()
@@ -202,7 +202,7 @@ void adc_task(void *arg)
             for (int i = 0; i < ret_num; i += SOC_ADC_DIGI_RESULT_BYTES) {
                 adc_digi_output_data_t *p = (adc_digi_output_data_t*)&result[i];
                 uint32_t chan_num = p->type2.channel;
-                /* Check the channel number validation, the data is invalid if the channel num exceed the maximum channel */
+                // Check the channel number validation, the data is invalid if the channel num exceed the maximum channel
                 if (chan_num < SOC_ADC_CHANNEL_NUM(ADC_UNIT_1)) {
                     uint32_t data = p->type2.data;
                     total += data;
@@ -210,9 +210,9 @@ void adc_task(void *arg)
                 }
             }
             if (values > 0) {
-                uint32_t average = total / values; // average viene en milivoltios
+                uint32_t average = total / values; // average in mV
                 int voltage;
-                error = adc_cali_raw_to_voltage(adc1_cali_chan0_handle, average, &voltage); // voltage in millivolts
+                error = adc_cali_raw_to_voltage(adc1_cali_chan0_handle, average, &voltage); // voltage mV
                 if (error == ESP_OK) {
                     // convert to 1s li-ion range
                     float bat_voltage = (float)(voltage * (float)MAX_BATTERY_VOLTAGE / (float)ADC_MAX_VALUE); // battery voltage from adc readings in millivolts, range to 4200 mv

@@ -1,7 +1,8 @@
 #include "esp_check.h"
 #include "freertos/FreeRTOS.h"
-// hal/ieee802154_ll.h removed: internal HAL header, path differs across IDF targets.
+// removed: internal HAL header, path differs across IDF targets.
 // IEEE802154_TXPOWER_INDEX_MIN = 0 on all ESP32 chips (minimum TX power level index).
+// hal/ieee802154_ll.h 
 #define IEEE802154_TXPOWER_INDEX_MIN  0
 
 #include "esp_zb_gas_version.h"
@@ -11,13 +12,13 @@
 #include "esp_zb_gas_ota.h"
 #include "esp_zb_gas_led.h"
 
-/* Zigbee configuration */
+// Zigbee configuration
 #define ED_AGING_TIMEOUT                ESP_ZB_ED_AGING_TIMEOUT_64MIN
-#define ED_KEEP_ALIVE                   30000    /* 30 secons in millisecond */
-#define ESP_ZB_PRIMARY_CHANNEL_MASK     ESP_ZB_TRANSCEIVER_ALL_CHANNELS_MASK  /* Zigbee primary channel mask use in the example */
+#define ED_KEEP_ALIVE                   30000    // 30 secons in millisecond
+#define ESP_ZB_PRIMARY_CHANNEL_MASK     ESP_ZB_TRANSCEIVER_ALL_CHANNELS_MASK  // Zigbee primary channel mask use in the example
 #define MY_METERING_ENDPOINT            1
 
-#define INITIAL_TIME_KEEPING_RADIO_ON   12  //changed to 12 seconds  2 * 60 /* 2 minutes in seconds */
+#define INITIAL_TIME_KEEPING_RADIO_ON   12  //changed to 12 seconds  2 * 60  (2 minutes in seconds)
 
 #ifdef FEATURE_LIGHT_SLEEP
 struct timeval time_commisioning_started = {
@@ -58,8 +59,8 @@ uint8_t battery_voltage_rated = RATED_BATTERY_VOLTAGE / 100;
 uint8_t battery_quantity = BATTERY_UNITS;
 #endif
 
-// value for the manufacturer_code, At this time this is whatever value 
-// I've never seen before. I don't know if there is a value for DIY devices
+// Manufacturer code value. Currently set to an arbitrary value,
+// as no official value for DIY devices is known.
 uint16_t manufacturer_code = HW_MANUFACTURER_CODE;
 
 // Formatting current_summation_delivered with 7 digits and 2 decimal places
@@ -212,7 +213,7 @@ esp_err_t zb_cmd_default_resp_handler(const esp_zb_zcl_cmd_default_resp_message_
 
     zb_log_esp_zb_zcl_cmd_info_t("Command default response", &message->info);
 
-    ESP_LOGI(TAG, "Default Response: Status: 0x%04x, To Command: 0x%x", message->status_code, message->resp_to_cmd);
+    ESP_LOGI(TAG, "Default response: status=0x%04x, command=0x%x", message->status_code, message->resp_to_cmd);
 
     return ESP_OK;
 }
@@ -380,7 +381,7 @@ esp_zb_zcl_status_t zb_radio_send_values(EventBits_t uxBits)
 // Attribute handler
 esp_err_t zb_action_handler(esp_zb_core_action_callback_id_t callback_id, const void *message) 
 {
-    ESP_LOGI(TAG, "In zb_action_handler callback_id=0x%04x", callback_id);
+    ESP_LOGI(TAG, "zb_action_handler: callback_id=0x%04x", callback_id);
     esp_err_t ret = ESP_OK;
     switch (callback_id) {
     case ESP_ZB_CORE_REPORT_ATTR_CB_ID: // 0x2000
@@ -450,7 +451,7 @@ esp_err_t update_reporting(esp_zb_zcl_attr_location_info_t *attr_location, uint3
 // initialize zigbee device
 void esp_zb_task(void *pvParameters) 
 {
-    ESP_LOGI(TAG, "Initialize zigbee task started");
+    ESP_LOGI(TAG, "Zigbee task initialization started.");
     #ifdef FEATURE_LIGHT_SLEEP
     gettimeofday(&time_commisioning_started, NULL);
     #endif
@@ -531,13 +532,13 @@ void esp_zb_task(void *pvParameters)
         ESP_ZB_ZCL_ATTR_BASIC_PRODUCT_LABEL_ID, PRODUCT_LABEL
     ));
 
-    /* identify cluster create with fully customized */
+    // identify cluster create with fully customized configuration
     esp_zb_identify_cluster_cfg_t identify_cfg = {
         .identify_time = identify_time
     };
     esp_zb_attribute_list_t *esp_zb_identify_cluster = esp_zb_identify_cluster_create(&identify_cfg);
 
-    /* power cluster
+    /* power cluster - commented out because ESP32H2
     #ifdef FEATURE_MEASURE_BATTERY_LEVEL
     esp_zb_power_config_cluster_cfg_t power_cfg = {
         .main_voltage = 0,
@@ -597,48 +598,48 @@ void esp_zb_task(void *pvParameters)
 
     esp_zb_attribute_list_t *esp_zb_metering_server_cluster = esp_zb_zcl_attr_list_create(ESP_ZB_ZCL_CLUSTER_ID_METERING);
 
-    /* client identify cluster */
+    // client identify cluster
     esp_zb_attribute_list_t *esp_zb_identify_client_cluster = esp_zb_zcl_attr_list_create(ESP_ZB_ZCL_CLUSTER_ID_IDENTIFY);
 
     ESP_ERROR_CHECK(esp_zb_cluster_add_attr(esp_zb_metering_server_cluster,
                                         ESP_ZB_ZCL_CLUSTER_ID_METERING,
                                         ESP_ZB_ZCL_ATTR_METERING_CURRENT_SUMMATION_DELIVERED_ID,
-                                        ESP_ZB_ZCL_ATTR_TYPE_U48,  // Tipo uint48_t
+                                        ESP_ZB_ZCL_ATTR_TYPE_U48,  // Type uint48_t
                                         ESP_ZB_ZCL_ATTR_ACCESS_READ_WRITE | ESP_ZB_ZCL_ATTR_ACCESS_REPORTING,
                                         &current_summation_delivered));
 
     ESP_ERROR_CHECK(esp_zb_cluster_add_attr(esp_zb_metering_server_cluster,
                                         ESP_ZB_ZCL_CLUSTER_ID_METERING,
                                         ESP_ZB_ZCL_ATTR_METERING_STATUS_ID,
-                                        ESP_ZB_ZCL_ATTR_TYPE_8BITMAP,  // Tipo uint8_t
+                                        ESP_ZB_ZCL_ATTR_TYPE_8BITMAP,  // Type uint8_t
                                         ESP_ZB_ZCL_ATTR_ACCESS_READ_ONLY | ESP_ZB_ZCL_ATTR_ACCESS_REPORTING,
                                         &device_status));
 
     ESP_ERROR_CHECK(esp_zb_cluster_add_attr(esp_zb_metering_server_cluster,
                                         ESP_ZB_ZCL_CLUSTER_ID_METERING,
                                         ESP_ZB_ZCL_ATTR_METERING_UNIT_OF_MEASURE_ID,
-                                        ESP_ZB_ZCL_ATTR_TYPE_U8,  // Tipo uint8_t
+                                        ESP_ZB_ZCL_ATTR_TYPE_U8,  // Type uint8_t
                                         ESP_ZB_ZCL_ATTR_ACCESS_READ_ONLY,
                                         &unit_of_measure));
 
     ESP_ERROR_CHECK(esp_zb_cluster_add_attr(esp_zb_metering_server_cluster,
                                         ESP_ZB_ZCL_CLUSTER_ID_METERING,
                                         ESP_ZB_ZCL_ATTR_METERING_SUMMATION_FORMATTING_ID,
-                                        ESP_ZB_ZCL_ATTR_TYPE_U8,  // Tipo uint8_t
+                                        ESP_ZB_ZCL_ATTR_TYPE_U8,  // Type uint8_t
                                         ESP_ZB_ZCL_ATTR_ACCESS_READ_ONLY,
                                         &summation_formatting));
 
     ESP_ERROR_CHECK(esp_zb_cluster_add_attr(esp_zb_metering_server_cluster,
                                         ESP_ZB_ZCL_CLUSTER_ID_METERING,
                                         ESP_ZB_ZCL_ATTR_METERING_METERING_DEVICE_TYPE_ID,
-                                        ESP_ZB_ZCL_ATTR_TYPE_U8,  // Tipo uint8_t
+                                        ESP_ZB_ZCL_ATTR_TYPE_U8,  // Type uint8_t
                                         ESP_ZB_ZCL_ATTR_ACCESS_READ_ONLY,
                                         &metering_device_type));
 
     ESP_ERROR_CHECK(esp_zb_cluster_add_attr(esp_zb_metering_server_cluster,
                                         ESP_ZB_ZCL_CLUSTER_ID_METERING,
                                         ESP_ZB_ZCL_ATTR_METERING_EXTENDED_STATUS_ID,
-                                        ESP_ZB_ZCL_ATTR_TYPE_64BITMAP,  // Tipo uint64_t
+                                        ESP_ZB_ZCL_ATTR_TYPE_64BITMAP,  // Type uint64_t
                                         ESP_ZB_ZCL_ATTR_ACCESS_READ_ONLY | ESP_ZB_ZCL_ATTR_ACCESS_REPORTING,
                                         &device_extended_status));
 
@@ -669,7 +670,7 @@ void esp_zb_task(void *pvParameters)
     ESP_ERROR_CHECK(esp_zb_cluster_add_attr(esp_zb_metering_server_cluster,
                                         ESP_ZB_ZCL_CLUSTER_ID_METERING,
                                         ESP_ZB_ZCL_ATTR_METERING_DEMAND_FORMATTING_ID,
-                                        ESP_ZB_ZCL_ATTR_TYPE_U8,  // Tipo uint8_t
+                                        ESP_ZB_ZCL_ATTR_TYPE_U8,  // Type uint8_t
                                         ESP_ZB_ZCL_ATTR_ACCESS_READ_ONLY,
                                         &demand_formatting));
 
@@ -683,10 +684,10 @@ void esp_zb_task(void *pvParameters)
                                         &current_summation_delivered));
     #endif
 
-    /* client identify cluster */
+    // client identify cluster
     //esp_zb_attribute_list_t *esp_zb_identify_client_cluster = esp_zb_zcl_attr_list_create(ESP_ZB_ZCL_CLUSTER_ID_IDENTIFY);
 
-    /* ota cluster */
+    // ota cluster
     esp_zb_ota_cluster_cfg_t ota_cluster_cfg = {
         // .ota_upgrade_file_version = app_desc->secure_version,
         .ota_upgrade_file_version = OTA_FILE_VERSION,
@@ -708,7 +709,7 @@ void esp_zb_task(void *pvParameters)
     ESP_ERROR_CHECK(esp_zb_cluster_list_add_identify_cluster(esp_zb_meter_cluster_list, esp_zb_identify_cluster, ESP_ZB_ZCL_CLUSTER_SERVER_ROLE));
     ESP_ERROR_CHECK(esp_zb_cluster_list_add_identify_cluster(esp_zb_meter_cluster_list, esp_zb_identify_client_cluster, ESP_ZB_ZCL_CLUSTER_CLIENT_ROLE));
     ESP_ERROR_CHECK(esp_zb_cluster_list_add_metering_cluster(esp_zb_meter_cluster_list, esp_zb_metering_server_cluster, ESP_ZB_ZCL_CLUSTER_SERVER_ROLE));
-    /*
+    /* - commented out because ESP32H2 doesn't support power cluster, need to enable when it's supported
     #ifdef FEATURE_MEASURE_BATTERY_LEVEL
     ESP_ERROR_CHECK(esp_zb_cluster_list_add_power_config_cluster(esp_zb_meter_cluster_list, esp_zb_power_cluster, ESP_ZB_ZCL_CLUSTER_SERVER_ROLE));
     #endif
@@ -808,10 +809,10 @@ void bdb_start_top_level_commissioning_cb(uint8_t mode_mask)
     ESP_RETURN_ON_FALSE(esp_zb_bdb_start_top_level_commissioning(mode_mask) == ESP_OK, , TAG, "Failed to start Zigbee bdb commissioning");
 }
 
-// end zigbee values up if there are changes in the measured values
+// Send Zigbee updates if the measured values have changed.
 void gm_main_loop_zigbee_task(void *arg) 
 {
-    ESP_LOGI(TAG, "Zigbee Loop Task...");
+    ESP_LOGI(TAG, "Zigbee loop task running");
     #ifdef FEATURE_LIGHT_SLEEP
     bool set_radio_off = true;
     #endif
@@ -840,7 +841,7 @@ void gm_main_loop_zigbee_task(void *arg)
             }
             #endif
             if (uxBits != 0) {
-                // Note we must manually clear the bits to avoid infinite loops
+                // Note: Bits must be cleared manually to avoid infinite loops.
                 esp_zb_zcl_status_t status = ESP_ZB_ZCL_STATUS_SUCCESS;
                 ESP_LOGI(TAG, "Reporting to client Sum=%s, Instant=%s, Bat=%s, Status=%s, Exten=%s"
                     ,((uxBits & CURRENT_SUMMATION_DELIVERED_REPORT) != 0) ? "Yes": "No"
@@ -860,8 +861,8 @@ void gm_main_loop_zigbee_task(void *arg)
                 if (esp_zb_lock_acquire(pdMS_TO_TICKS(1000))) {
                     status = zb_radio_setup_report_values(uxBits);
                     #ifdef FEATURE_DEEP_SLEEP
-                    // under deep sleep mode we must send the values regardless of the
-                    // schedule set in the attribute reporting configuration
+                    // In deep sleep mode, values must be sent regardless of the
+                    // schedule defined in the attribute reporting configuration.
                     if (status == ESP_ZB_ZCL_STATUS_SUCCESS) {
                         status = zb_radio_send_values(uxBits);
                     }
@@ -912,7 +913,7 @@ void esp_zb_app_signal_handler(esp_zb_app_signal_t *signal_struct)
         ESP_LOGI(TAG, "ZDO DEFAULT START - status: %s", esp_err_to_name(err_status));
         break;
     case ESP_ZB_ZDO_SIGNAL_SKIP_STARTUP:
-        ESP_LOGI(TAG, "Zigbee commissioning");
+        ESP_LOGI(TAG, "Zigbee commissioning started");
         #ifdef FEATURE_DEEP_SLEEP
         TickType_t deep_sleep_time = portMAX_DELAY;
         if (xQueueSendToFront(deep_sleep_queue_handle, &deep_sleep_time, pdMS_TO_TICKS(100)) != pdTRUE)
@@ -936,7 +937,7 @@ void esp_zb_app_signal_handler(esp_zb_app_signal_t *signal_struct)
                 #endif
                 esp_zb_bdb_start_top_level_commissioning(ESP_ZB_BDB_MODE_NETWORK_STEERING);
             } else {
-                ESP_LOGI(TAG, "Device rebooted");
+                ESP_LOGI(TAG, "Device reboot detected");
                 xEventGroupSetBits(report_event_group_handle, CURRENT_SUMMATION_DELIVERED_REPORT); // send pulses
             }
             err_status = gm_tasks_init();
@@ -979,7 +980,7 @@ void esp_zb_app_signal_handler(esp_zb_app_signal_t *signal_struct)
             esp_zb_nvram_erase_at_start(true);                                          // erase previous network information.
             esp_zb_bdb_start_top_level_commissioning(ESP_ZB_BDB_MODE_NETWORK_STEERING); // steering a new network.
         }
-        // leaving_network = false; // not needed as it is handled in the callback function
+        
         break;
     case ESP_ZB_ZDO_SIGNAL_PRODUCTION_CONFIG_READY:
         esp_zb_set_node_descriptor_manufacturer_code(manufacturer_code);

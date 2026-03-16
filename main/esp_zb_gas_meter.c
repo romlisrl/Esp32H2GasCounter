@@ -14,7 +14,7 @@
 #include "esp_zb_gas_ota.h"
 #include "esp_zb_gas_led.h"
 
-/* Experimental, check if we sleepy device can help the design */
+// // Experimental: testing whether using a sleepy device improves the design.
 #ifdef CONFIG_PM_ENABLE
 #include "esp_pm.h"
 #include "esp_private/esp_clk.h"
@@ -24,7 +24,7 @@
 #define REED_DEBOUNCE_TIMEOUT 1000U /* milliseconds */
 #define BTN_DEBOUNCE_TIMEOUT 30 /* milliseconds */
 
-/* Human interaction and device configuration */
+// Human interaction and device configuration
 
 // How long the MAIN BUTTON must be pressed to consider a LONG PRESS
 #define LONG_PRESS_TIMEOUT 5 // seconds
@@ -159,10 +159,11 @@ esp_err_t gm_counter_load_nvs()
     if (err == ESP_OK) {
         current_summation_delivered.low  =  saved_count & 0x00000000FFFFFFFF;
         current_summation_delivered.high = (saved_count & 0x0000FFFF00000000) >> 32;
-        ESP_LOGI(TAG, "Counter loaded: low=%lu high=%u",
-                 current_summation_delivered.low, current_summation_delivered.high);
+        //ESP_LOGI(TAG, "Counter loaded: low=%lu high=%u",
+        //         current_summation_delivered.low, current_summation_delivered.high);
+        ESP_LOGI(TAG, "Counter loaded pulses=%lu", current_summation_delivered.low);
     } else if (err == ESP_ERR_NVS_NOT_FOUND) {
-        ESP_LOGI(TAG, "Counter not found in memory, starting from 0");
+        ESP_LOGI(TAG, "Counter value not found in memory, starting from 0");
         err = ESP_OK;
     } else {
         ESP_LOGE(TAG, "Error reading NVS: %s", esp_err_to_name(err));
@@ -184,7 +185,8 @@ void save_counter_task(void *arg)
         if (err == ESP_OK)
         {
             nvs_commit(my_nvs_handle);
-            ESP_LOGI(TAG, "Counter stored: low=%lu high=%d", current_summation_delivered.low, current_summation_delivered.high);
+            //ESP_LOGI(TAG, "Counter stored: low=%lu high=%d", current_summation_delivered.low, current_summation_delivered.high);
+            ESP_LOGI(TAG, "Counter stored pulses=%lu", current_summation_delivered.low);
             #ifdef FEATURE_DEEP_SLEEP
             if (deep_sleep_task_handle != NULL)
             {
@@ -193,9 +195,6 @@ void save_counter_task(void *arg)
                     ESP_LOGE(TAG, "Can't reschedule deep sleep timer");
             }
             #endif
-            // led_on();
-            // vTaskDelay(pdMS_TO_TICKS(100)); 
-            // led_off();
         }
         else
         {
@@ -364,7 +363,7 @@ void gm_counter_increment(bool fromISR)
 {
     // if(!fromISR){
     //    led_on();
-    //    vTaskDelay(pdMS_TO_TICKS(50)); 
+    //    vTaskDelay(pdMS_TO_TICKS(100)); 
     //    led_off();
     // }
     current_summation_delivered.low += 1; // Adds up 1 cent of m³
@@ -442,16 +441,11 @@ void deep_sleep_controller_task(void *arg)
         TickType_t new_timer_value;
         if (xQueueReceive(deep_sleep_queue_handle, &new_timer_value, portMAX_DELAY) == pdTRUE)
         {
-            // REMOVE FOR PRODUCTION. We are going to disable deep sleep for testing
-            // if (xTimerStop(deep_sleep_timer, pdMS_TO_TICKS(100)) != pdPASS)
-            // {
-            //     ESP_LOGE(TAG, "Can't stop deep sleep timer");
-            // }
-            ESP_LOGI(TAG, "Deep sleep timer value received %d", new_timer_value);
+            ESP_LOGI(TAG, "Deep sleep scheduled: %d", new_timer_value);
             if (deep_sleep_gracie_period.tv_sec > 0) {
                 int elapsed = time_diff_ms(&deep_sleep_gracie_period);
                 if (elapsed < 0) {
-                    ESP_LOGI(TAG, "Deep sleep timer Under grace period, ignored");
+                    ESP_LOGI(TAG, "Deep sleep timer within grace period, ignored");
                     continue;
                 }
             }
@@ -723,7 +717,7 @@ void gm_main_loop_task(void *arg)
             if ((uxBits & SHALL_ENABLE_ZIGBEE) == SHALL_ENABLE_ZIGBEE)
             {
                 if (zigbee_task_handle == NULL) {
-                    ESP_LOGI(TAG, "Starting zigbee radio functionality");
+                    ESP_LOGI(TAG, "Starting Zigbee radio");
                     #ifdef CONFIG_EXTERNAL_ANTENNA
                     uint64_t antenna_switch_pin = 1ULL << GPIO_NUM_3;
                     uint64_t antenna_mode_pin = 1ULL << GPIO_NUM_14;
@@ -779,7 +773,7 @@ void gm_main_loop_task(void *arg)
                 if (deep_sleep_task_handle != NULL) {
                     esp_zb_scheduler_alarm(reschedule_event, SHALL_START_DEEP_SLEEP, 250);
                 } else {
-                    ESP_LOGI(TAG, "Starting deep sleep functionality");
+                    ESP_LOGI(TAG, "Starting deep sleep management");
                     ESP_ERROR_CHECK(xTaskCreate(deep_sleep_controller_task, "deep_sleep", 2048, NULL, 20, &deep_sleep_task_handle) != pdPASS);
                 }
             }
@@ -804,7 +798,7 @@ void gm_main_loop_task(void *arg)
                 if (xQueueSendToFront(deep_sleep_queue_handle, &deep_sleep_time, pdMS_TO_TICKS(100)) != pdTRUE)
                     ESP_LOGE(TAG, "Can't reschedule deep sleep timer");
             } else {
-                ESP_LOGI(TAG, "Will wait for %ds ... to start deep sleep", -(elapsed/1000));
+                ESP_LOGI(TAG, "Entering deep sleep in %d s", -(elapsed/1000));
             }
         }
         #endif
@@ -820,10 +814,10 @@ void enter_deep_sleep_cb(TimerHandle_t xTimer)
     /* Enter deep sleep */
     if (deep_sleep_task_handle == NULL)
     {
-        ESP_LOGI(TAG, "Enter deep sleep cancelled");
+        ESP_LOGI(TAG, "Entering deep sleep cancelled");
         return;
     }
-    ESP_LOGI(TAG, "Enter deep sleep");
+    ESP_LOGI(TAG, "Entering deep sleep");
     exception_pulse_button_on_hold = gpio_get_level(PULSE_PIN) == 0; // for interrupt to GND changed to 0
     gettimeofday(&sleep_enter_time, NULL);
     esp_deep_sleep_start();
@@ -853,7 +847,7 @@ esp_err_t gm_deep_sleep_init()
         case ESP_SLEEP_WAKEUP_TIMER:
         {
             #ifdef FEATURE_DEEP_SLEEP
-            ESP_LOGI(TAG, "Wake up from timer. Time spent in deep sleep and boot: %dms", sleep_time_ms);
+            ESP_LOGI(TAG, "Wake up by timer. Time in deep sleep + boot: %dms", sleep_time_ms);
             #else
             ESP_LOGI(TAG, "Wake up from timer");
             #endif
@@ -933,7 +927,7 @@ esp_err_t gm_deep_sleep_init()
             xEventGroupSetBits(report_event_group_handle, CURRENT_SUMMATION_DELIVERED_REPORT);
             break;
     }
-    ESP_LOGI(TAG, "Check if zigbee radio shall be enabled");
+    ESP_LOGI(TAG, "Checking if Zigbee radio should be enabled");
     check_shall_enable_radio();
     #ifdef FEATURE_MEASURE_BATTERY_LEVEL
     ESP_LOGI(TAG, "Check if battery shall be measured");
@@ -948,13 +942,13 @@ esp_err_t gm_deep_sleep_init()
         /* Set the methods of how to wake up: */
         /* 1. RTC timer waking-up */
         /* This is useless in LIGHT_SLEEP */
-        ESP_LOGI(TAG, "Configuring wake up methods");
+        ESP_LOGI(TAG, "Configuring wake-up methods");
         int report_time_s = (gpio_time.tv_sec - last_report_sent_time.tv_sec) +
                             (gpio_time.tv_usec - last_report_sent_time.tv_usec) / 1000000;
         if (report_time_s > MUST_SYNC_MINIMUM_TIME)
             report_time_s = MUST_SYNC_MINIMUM_TIME;
         const uint64_t wakeup_time_sec = MUST_SYNC_MINIMUM_TIME - report_time_s;
-        ESP_LOGI(TAG, "Enabling timer wakeup, %llds", wakeup_time_sec);
+        ESP_LOGI(TAG, "Enabling wake-up timer , %llds", wakeup_time_sec);
         ESP_ERROR_CHECK(esp_sleep_enable_timer_wakeup((wakeup_time_sec < 10 ? 10 : wakeup_time_sec) * 1000000));
 
         /* PULSE_PIN and MAIN_BTN wake up on pull up */       
@@ -1138,7 +1132,7 @@ esp_err_t report_reset_reason()
         device_extended_status |= ESP_ZB_ZCL_METERING_WATCHDOG_ERROR;
         return ESP_FAIL;
     case ESP_RST_DEEPSLEEP: //!< Reset after exiting deep sleep mode
-        ESP_LOGI(TAG, "After exiting deep sleep reset reason");
+        ESP_LOGI(TAG, "Reset after wake-up from deep sleep mode");
         break;
     case ESP_RST_BROWNOUT: //!< Brownout reset (software or hardware)
         ESP_LOGI(TAG, "Brownout reset reason");
@@ -1172,7 +1166,7 @@ void app_main(void)
     esp_log_level_set("*", ESP_LOG_ERROR);
     esp_log_level_set(TAG, ESP_LOG_INFO);
     ESP_LOGD(TAG, "\n");
-    ESP_LOGI(TAG, "Starting Zigbee GasCounter...");
+    ESP_LOGI(TAG, "Starting Zigbee GasCounter application");
     esp_err_t reset_error = report_reset_reason();
 
     #ifdef FEATURE_DEEP_SLEEP
@@ -1213,17 +1207,17 @@ void app_main(void)
         xEventGroupSetBits(report_event_group_handle, EXTENDED_STATUS_REPORT);
     }
 
-    ESP_LOGI(TAG, "Configuring led");
+    ESP_LOGI(TAG, "Configuring LED");
     ESP_ERROR_CHECK(config_led());
-    ESP_LOGI(TAG, "Led ON");
-    ESP_LOGI(TAG, "Configuring GPIO Interrupt...");
+    ESP_LOGI(TAG, "LED On");
+    ESP_LOGI(TAG, "Configuring GPIO Interrupt");
     ESP_ERROR_CHECK(gm_gpio_interrup_init());
     ESP_LOGI(TAG, "Configuring NVS Flash");
     ESP_ERROR_CHECK(gm_nvs_init());
     //ESP_ERROR_CHECK(nvs_flash_init());
     ESP_LOGI(TAG, "Configuring power save");
     ESP_ERROR_CHECK(esp_zb_power_save_init());
-    ESP_LOGI(TAG, "Load counter from NVS");
+    ESP_LOGI(TAG, "Loading counter value from NVS");
     ESP_ERROR_CHECK(gm_counter_load_nvs());
     ESP_LOGI(TAG, "Setup deep sleep");
     ESP_ERROR_CHECK(gm_deep_sleep_init());

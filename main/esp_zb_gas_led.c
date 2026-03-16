@@ -13,10 +13,7 @@ typedef enum LedState_e {
 
 led_state_t led_state;
 
-/**
- * @brief Turn led on
- *
- */
+// Turn led on
 void led_on()
 {
 	led_state = ON;
@@ -26,10 +23,7 @@ void led_on()
 	}
 }
 
-/**
- * @brief Turn led off
- *
- */
+// Turn led off
 void led_off()
 {
 	led_state = OFF;
@@ -38,20 +32,12 @@ void led_off()
 	}
 }
 
-/**
- * @brief true if the led is on
- *
- * @return true
- * @return false
- */
+// Check if led is on
 bool led_is_on() {
 	return led_state == ON;
 }
 
-/**
- * @brief Configure the led pin
- *
- */
+// Configure led strip
 esp_err_t config_led()
 {
 	led_strip_config_t strip_config = {
@@ -67,7 +53,7 @@ esp_err_t config_led()
 		}
 	};
 
-	// Создаем устройство и сохраняем его в led_strip
+	// Create device and save it in led_strip
     esp_err_t ret = led_strip_new_rmt_device(&strip_config, &rmt_config, &led_strip);
     
     if (ret == ESP_OK) {
