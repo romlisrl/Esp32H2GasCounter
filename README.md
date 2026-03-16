@@ -43,7 +43,7 @@ Data is transmitted either periodically (timer) or when a predefined number of a
 | GND        | Reed sensor GND                             |
 | VBat       | +3.3V (check voltage with series resistor)  |
 | GND        | -3.3V                                       |
-| Optional   | Status LED                                  |
+|            |                                             |
 
 
 ---
