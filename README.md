@@ -48,6 +48,7 @@ Data is transmitted either periodically (timer) or when a predefined number of a
 |            |                                             |
 
 ![ESP32-H2 DevKitM-1 Pinout](images/esp32-h2-devkitm1-pinlayout.png)
+<img src="./images/esp32-h2-devkitm1-pinlayout.png" width="400" alt="ESP32-H2 DevKitM-1 Pinout" />
 
 ---
 
