@@ -82,6 +82,8 @@ GAS_COUNTER: Enabling wake-up timer , 162s
 ```
 
 ---
+## Installation  
+
 ### 1️⃣ Using ESP-IDF (recommended)  
 
 ```bash
