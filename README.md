@@ -1,3 +1,4 @@
+[![Buy Me a Coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://buymeacoffee.com/romlis)
 # ESP32H2 Gas Counter with Zigbee2MQTT
 
 **ESP32H2-based gas counter** that measures pulses from a gas meter and sends them to **Zigbee2MQTT**.  
