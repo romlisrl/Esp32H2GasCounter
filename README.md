@@ -32,7 +32,7 @@ Data is transmitted either periodically (timer) or when a predefined number of a
 ## Software Requirements
 
 - **ESP-IDF** v5.x  
-- **Zigbee2MQTT** external converter 
+- **Zigbee2MQTT** external converter  
 
 ---
 
@@ -63,7 +63,7 @@ Data is transmitted either periodically (timer) or when a predefined number of a
 
 1. ESP32H2 counts pulses from the gas meter.  
 2. Pulses are stored in **NVS flash** to survive reboots or deep sleep.  
-3. When **timer expires** or **pulse threshold** is reached data is sent to **Zigbee2MQTT**.
+3. When **timer expires** or **pulse threshold** is reached data is sent to **Zigbee2MQTT**.  
 4. Device enters **deep sleep** to save power until next event (pulse or timer).  
 
 ---
@@ -84,15 +84,15 @@ GAS_COUNTER: Enabling wake-up timer , 162s
 
 ## Flashing
 
-git clone https://github.com/romlisrl/Esp32H2GasCounter 
-cd Esp32H2GasCounter 
-idf.py menuconfig 
-idf.py build flash monitor
+git clone https://github.com/romlisrl/Esp32H2GasCounter  
+cd Esp32H2GasCounter  
+idf.py menuconfig  
+idf.py build flash monitor  
 
 ---
 
 ## Notes
 
 Make sure the Zigbee coordinator is running and paired.  
-Configure Zigbee2MQTT to match firmware endpoint and cluster IDs. 
+Configure Zigbee2MQTT to match firmware endpoint and cluster IDs.  
 Optimized for battery-operated, low-power operation. 
