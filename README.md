@@ -15,7 +15,7 @@ Data is transmitted either periodically (timer) or when a predefined number of a
 - Sends data to **Zigbee2MQTT**:  
   - On a configurable timer  
   - When accumulated pulses reach a threshold  
-  - Pressing embedded **Boot button**
+  - Triggers immediate transmission when **Boot button** is pressed  
 - Supports **deep sleep** for low power.  
 - LED for pulse indication.  
 
@@ -43,10 +43,11 @@ Data is transmitted either periodically (timer) or when a predefined number of a
 |------------|--------------------------------------------|
 | GPIO10     | Reed sensor signal                          |
 | GND        | Reed sensor GND                             |
-| VBat       | +3.3V (check voltage with series resistor)  |
+| VBat(Vcc)  | +3.3V (check voltage with series resistor)  |
 | GND        | -3.3V                                       |
 |            |                                             |
 
+![ESP32-H2 DevKitM-1 Pinout](./images/esp32-h2-devkitm1-pinlayout.png)
 
 ---
 
