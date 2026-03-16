@@ -71,14 +71,16 @@ Data is transmitted either periodically (timer) or when a predefined number of a
 ## Example Logs
 
 ```text
-GAS_COUNTER: Counter loaded pulses=160
+GAS_COUNTER: Counter loaded value=160
 GAS_COUNTER: Setup deep sleep
 GAS_COUNTER: Wake up from PULSE.
 GAS_COUNTER: Checking if Zigbee radio should be enabled
-GAS_COUNTER: Counter stored pulses=161
+GAS_COUNTER: Counter stored value=161
 GAS_COUNTER: Configuring wake-up methods
 GAS_COUNTER: Enabling wake-up timer , 162s
 ```
+
+---
 
 ## Flashing
 
@@ -86,6 +88,8 @@ git clone https://github.com/romlisrl/Esp32H2GasCounter
 cd Esp32H2GasCounter
 idf.py menuconfig
 idf.py build flash monitor
+
+---
 
 ## Notes
 
