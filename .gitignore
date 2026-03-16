@@ -1,0 +1,8 @@
+notes/
+build/
+managed_components/
+consumption-measures/
+.vscode/
+sdkconfig.old
+~*
+*.bak
