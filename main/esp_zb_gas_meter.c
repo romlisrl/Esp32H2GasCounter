@@ -176,6 +176,7 @@ void save_counter_task(void *arg)
     while (true)
     {
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+        led_on();
         uint64_t to_save_count = current_summation_delivered.high;
         to_save_count <<= 32;
         to_save_count |= current_summation_delivered.low;
@@ -192,6 +193,9 @@ void save_counter_task(void *arg)
                     ESP_LOGE(TAG, "Can't reschedule deep sleep timer");
             }
             #endif
+            // led_on();
+            // vTaskDelay(pdMS_TO_TICKS(100)); 
+            // led_off();
         }
         else
         {
@@ -358,7 +362,11 @@ void gm_compute_instantaneous_demand(int time_diff_ms, bool fromISR)
 // Adds one to current_summation_delivered and nothing else
 void gm_counter_increment(bool fromISR)
 {
-    led_on();
+    // if(!fromISR){
+    //    led_on();
+    //    vTaskDelay(pdMS_TO_TICKS(50)); 
+    //    led_off();
+    // }
     current_summation_delivered.low += 1; // Adds up 1 cent of m³
     if (current_summation_delivered.low == 0)
     {
@@ -428,7 +436,7 @@ TickType_t dm_deep_sleep_time_ticks()
 void deep_sleep_controller_task(void *arg)
 {
     ESP_LOGI(TAG, "Deep sleep task started");
-    led_off();
+    //led_off();
     while (true)
     {
         TickType_t new_timer_value;
@@ -590,7 +598,7 @@ void btn_task(void *arg)
         switch (state) {
             case PRESS:
                 ESP_LOGI(TAG, "Button press");
-                led_on();
+                //led_on();
                 xEventGroupSetBits(main_event_group_handle, SHALL_ENABLE_ZIGBEE);
                 #ifdef FEATURE_DEEP_SLEEP
                 if (deep_sleep_task_handle != NULL)
@@ -641,7 +649,7 @@ void btn_task(void *arg)
                 break;
             case NONE:
                 ESP_LOGI(TAG, "Button state reset");
-                led_off();
+                //led_off();
                 break;
             default:
                 ESP_LOGI(TAG, "Unknown button state");

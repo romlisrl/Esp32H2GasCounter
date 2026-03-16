@@ -1,9 +1,11 @@
 #include "esp_check.h"
 #include "driver/gpio.h"
+#include "led_strip.h"
 
 #include "esp_zb_gas_meter.h"
 #include "esp_zb_gas_led.h"
 
+static led_strip_handle_t led_strip;
 typedef enum LedState_e {
 	ON,
 	OFF
@@ -18,7 +20,10 @@ led_state_t led_state;
 void led_on()
 {
 	led_state = ON;
-	gpio_set_level(LED_PIN, 0);
+	if (led_strip) {
+		led_strip_set_pixel(led_strip, 0, 0, 20, 0);  // white (led_strip, 0, 50, 50, 50)
+		led_strip_refresh(led_strip);
+	}
 }
 
 /**
@@ -28,7 +33,9 @@ void led_on()
 void led_off()
 {
 	led_state = OFF;
-	gpio_set_level(LED_PIN, 1);
+	if (led_strip) {
+		led_strip_clear(led_strip);
+	}
 }
 
 /**
@@ -47,16 +54,26 @@ bool led_is_on() {
  */
 esp_err_t config_led()
 {
-	uint64_t led_switch_pin = 1ULL << LED_PIN;
-	gpio_config_t led_conf = {
-			.intr_type = GPIO_INTR_DISABLE,
-			.mode = GPIO_MODE_OUTPUT,
-			.pin_bit_mask = led_switch_pin,
-			.pull_down_en = GPIO_PULLDOWN_DISABLE,
-			.pull_up_en = GPIO_PULLUP_ENABLE
+	led_strip_config_t strip_config = {
+		.strip_gpio_num = LED_PIN,
+		.max_leds = 1,
 	};
-	ESP_RETURN_ON_ERROR(gpio_config(&led_conf), TAG, "Failed to configure LED pin");
-	ESP_RETURN_ON_ERROR(gpio_set_level(LED_PIN, 1), TAG, "Failed to turn off led");
 
-	return ESP_OK;
+	led_strip_rmt_config_t rmt_config = {
+		.clk_src = RMT_CLK_SRC_DEFAULT,
+		.resolution_hz = 10 * 1000 * 1000, // 10MHz
+		.flags = {
+			.with_dma = false,
+		}
+	};
+
+	// Создаем устройство и сохраняем его в led_strip
+    esp_err_t ret = led_strip_new_rmt_device(&strip_config, &rmt_config, &led_strip);
+    
+    if (ret == ESP_OK) {
+        led_strip_clear(led_strip);
+        led_state = OFF;
+    }
+
+	return ret;
 }
