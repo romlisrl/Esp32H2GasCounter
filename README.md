@@ -62,7 +62,7 @@
 
 ## How It Works
 
-1. ESP32H2 counts pulses from the gas meter.  
+1. ESP32H2 counts pulses from the meter.  
 2. Pulses are stored in **NVS flash** to survive reboots or deep sleep.  
 3. When **timer expires** or **pulse threshold** is reached data is sent to **Zigbee2MQTT**.  
 4. Device enters **deep sleep** to save power until next event (pulse or timer).  
