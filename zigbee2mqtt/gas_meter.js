@@ -6,14 +6,25 @@ const fzGas = {
     cluster: 'seMetering',
     type: ['attributeReport', 'readResponse'],
     convert: (model, msg, publish, options, meta) => {
-        console.log('seMetering data:', JSON.stringify(msg.data));
-        
+        console.log('>>> fzGas called');
+        console.log('>>> msg.data:', JSON.stringify(msg.data));
+
         if (msg.data['currentSummDelivered'] !== undefined) {
             const raw = msg.data['currentSummDelivered'];
-            console.log('currentSummDelivered raw:', raw, typeof raw);
+
+            // UINT48 приходит как массив [low, high]
+            let rawValue;
+            if (Array.isArray(raw)) {
+                rawValue = raw[0] + raw[1] * 0x100000000;
+            } else {
+                rawValue = Number(raw);
+            }
+
             const divisor = msg.data['divisor'] || 100;
             const multiplier = msg.data['multiplier'] || 1;
-            const value = Number(raw) * multiplier / divisor;
+            const value = rawValue * multiplier / divisor;
+
+            console.log('>>> gas value:', value);
             return { gas: value };
         }
     },
@@ -34,7 +45,18 @@ const definition = {
     ],
     configure: async (device, coordinatorEndpoint) => {
         const endpoint = device.getEndpoint(1);
+
+        // Читаем multiplier/divisor
         await endpoint.read('seMetering', ['multiplier', 'divisor']);
+
+        // Привязываем репортинг
+        await endpoint.bind('seMetering', coordinatorEndpoint);
+        await endpoint.configureReporting('seMetering', [{
+            attribute: 'currentSummDelivered',
+            minimumReportInterval: 0,
+            maximumReportInterval: 3600,
+            reportableChange: 1,
+        }]);
     },
 };
 
