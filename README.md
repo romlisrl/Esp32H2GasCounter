@@ -22,7 +22,7 @@
 
 ## Hardware
 
-- ESP32H2 board  
+- ESP32-H2-DevKitM-1 board (Aliexpress)  
 - Gas meter with pulse output (e.g., BK-G4MT, G16-U25 Honeywell or similar)  
 - Reed sensor: **Normally Open (NO)** – tested with GPS-01 Reed Switch 4×18 (Aliexpress)
 - Optional battery  
