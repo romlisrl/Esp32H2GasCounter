@@ -12,7 +12,7 @@ const fzGas = {
         if (msg.data['currentSummDelivered'] !== undefined) {
             const raw = msg.data['currentSummDelivered'];
 
-            // UINT48 приходит как массив [low, high]
+            // UINT48 as array [low, high]
             let rawValue;
             if (Array.isArray(raw)) {
                 rawValue = raw[0] + raw[1] * 0x100000000;
@@ -46,10 +46,10 @@ const definition = {
     configure: async (device, coordinatorEndpoint) => {
         const endpoint = device.getEndpoint(1);
 
-        // Читаем multiplier/divisor
+        // Read multiplier/divisor
         await endpoint.read('seMetering', ['multiplier', 'divisor']);
 
-        // Привязываем репортинг
+        // Link reporting
         await endpoint.bind('seMetering', coordinatorEndpoint);
         await endpoint.configureReporting('seMetering', [{
             attribute: 'currentSummDelivered',
