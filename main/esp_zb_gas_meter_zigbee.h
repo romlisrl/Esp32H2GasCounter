@@ -4,6 +4,9 @@
 #include "zcl/esp_zigbee_zcl_power_config.h"
 #include "zcl/esp_zigbee_zcl_metering.h"
 
+// Initial value for the counter, in case it's not found in NVS
+#define INITIAL_COUNTER_VALUE 0
+
 // Maximum time to force a device report
 #define MUST_SYNC_MINIMUM_TIME          UINT16_C(60 * 60) // 60 minutes in seconds
 

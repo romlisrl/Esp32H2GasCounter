@@ -28,7 +28,7 @@ struct timeval time_commisioning_started = {
 #endif
 
 esp_zb_uint48_t current_summation_delivered = {
-	.low = 0,
+	.low = INITIAL_COUNTER_VALUE,
 	.high = 0
 };
 
