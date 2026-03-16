@@ -84,15 +84,15 @@ GAS_COUNTER: Enabling wake-up timer , 162s
 
 ## Flashing
 
-git clone https://github.com/romlisrl/Esp32H2GasCounter
-cd Esp32H2GasCounter
-idf.py menuconfig
+git clone https://github.com/romlisrl/Esp32H2GasCounter 
+cd Esp32H2GasCounter 
+idf.py menuconfig 
 idf.py build flash monitor
 
 ---
 
 ## Notes
 
-Make sure the Zigbee coordinator is running and paired.
-Configure Zigbee2MQTT to match firmware endpoint and cluster IDs.
-Optimized for battery-operated, low-power operation.
+Make sure the Zigbee coordinator is running and paired.  
+Configure Zigbee2MQTT to match firmware endpoint and cluster IDs. 
+Optimized for battery-operated, low-power operation. 
