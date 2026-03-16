@@ -10,7 +10,7 @@ Data is transmitted either periodically (timer) or when a predefined number of a
 
 ## Features
 
-- Counts pulses from a gas meter using GPIO.  
+- Counts pulses from a meter using a reed sensor connected to a GPIO and GND pin. 
 - Stores pulse count in **non-volatile memory (NVS)**.  
 - Sends data to **Zigbee2MQTT**:  
   - On a configurable timer  
