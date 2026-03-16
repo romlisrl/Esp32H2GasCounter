@@ -161,7 +161,7 @@ esp_err_t gm_counter_load_nvs()
         current_summation_delivered.high = (saved_count & 0x0000FFFF00000000) >> 32;
         //ESP_LOGI(TAG, "Counter loaded: low=%lu high=%u",
         //         current_summation_delivered.low, current_summation_delivered.high);
-        ESP_LOGI(TAG, "Counter loaded pulses=%lu", current_summation_delivered.low);
+        ESP_LOGI(TAG, "Counter loaded value=%lu", current_summation_delivered.low);
     } else if (err == ESP_ERR_NVS_NOT_FOUND) {
         ESP_LOGI(TAG, "Counter value not found in memory, starting from 0");
         err = ESP_OK;
@@ -186,7 +186,7 @@ void save_counter_task(void *arg)
         {
             nvs_commit(my_nvs_handle);
             //ESP_LOGI(TAG, "Counter stored: low=%lu high=%d", current_summation_delivered.low, current_summation_delivered.high);
-            ESP_LOGI(TAG, "Counter stored pulses=%lu", current_summation_delivered.low);
+            ESP_LOGI(TAG, "Counter stored value=%lu", current_summation_delivered.low);
             #ifdef FEATURE_DEEP_SLEEP
             if (deep_sleep_task_handle != NULL)
             {
@@ -441,7 +441,7 @@ void deep_sleep_controller_task(void *arg)
         TickType_t new_timer_value;
         if (xQueueReceive(deep_sleep_queue_handle, &new_timer_value, portMAX_DELAY) == pdTRUE)
         {
-            ESP_LOGI(TAG, "Deep sleep scheduled: %d", new_timer_value);
+            ESP_LOGI(TAG, "Deep sleep scheduled: %d s", new_timer_value / 100);
             if (deep_sleep_gracie_period.tv_sec > 0) {
                 int elapsed = time_diff_ms(&deep_sleep_gracie_period);
                 if (elapsed < 0) {
