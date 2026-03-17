@@ -54,7 +54,8 @@
 
 ## 📦 Requirements
 
-- **Zigbee2MQTT** with external converter configured  
+- [**Zigbee2MQTT**](https://www.zigbee2mqtt.io/) with external converter configured  
+- [ESP-IDF](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/index.html) (used in installation by ESP-IDF)  
 
 ---
 
