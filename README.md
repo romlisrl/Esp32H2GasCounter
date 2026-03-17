@@ -128,6 +128,15 @@ Connect the board to the UART port (example: COM10 on Windows)
 
 ---
 
+## 🛠️ To Be Done
+
+The following tasks are planned or pending implementation:
+
+- [ ] **Implement battery voltage measurement via voltage divider on GPIO3** — include ADC reading and calibration.  
+- [ ] **Add configuration for voltage divider parameters** (scaling factor, low-battery thresholds).  
+
+---
+
 ## 📝 Notes
 
 - Make sure the Zigbee coordinator is running and **permit join is enabled**
