@@ -31,7 +31,7 @@
 ---
 
 ## ✨ Features
-
+<img src="./images/Zigbee2MQTT.png" width="400" alt="Zigbee2MQTT" />  
 - Counts pulses from a meter using a reed sensor connected to a GPIO and GND pin. 
 - Stores pulse count in **non-volatile memory (NVS)**.  
 - Sends data to **Zigbee2MQTT**:  
