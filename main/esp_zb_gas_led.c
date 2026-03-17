@@ -13,14 +13,37 @@ typedef enum LedState_e {
 
 led_state_t led_state;
 
-// Turn led on
-void led_on()
+// Turn led on with specified color
+void led_on(led_color_t color)
 {
-	led_state = ON;
-	if (led_strip) {
-		led_strip_set_pixel(led_strip, 0, 0, 20, 0);  // white (led_strip, 0, 50, 50, 50)
-		led_strip_refresh(led_strip);
-	}
+    led_state = ON;
+    if (led_strip) {
+        uint8_t r = 0, g = 0, b = 0;
+        switch (color) {
+            case LED_COLOR_RED:
+				r = 20;
+				break;
+            case LED_COLOR_GREEN:
+				g = 20;
+				break;
+            case LED_COLOR_BLUE:
+				b = 20;
+				break;
+            case LED_COLOR_WHITE:
+				r = 20; g = 20; b = 20;
+				break;
+            case LED_COLOR_YELLOW:
+				r = 20;
+				g = 20;
+				b = 20;
+				break;
+            default:
+				g = 20;
+				break;
+        }
+        led_strip_set_pixel(led_strip, 0, r, g, b);
+        led_strip_refresh(led_strip);
+    }
 }
 
 // Turn led off

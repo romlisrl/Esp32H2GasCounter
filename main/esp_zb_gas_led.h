@@ -6,7 +6,15 @@
 
 esp_err_t config_led();
 
-void led_on();
+typedef enum {
+    LED_COLOR_RED    = 0,
+    LED_COLOR_GREEN  = 1,
+    LED_COLOR_BLUE   = 2,
+    LED_COLOR_WHITE  = 3,
+    LED_COLOR_YELLOW = 4,
+} led_color_t;
+
+void led_on(led_color_t color);
 
 void led_off();
 

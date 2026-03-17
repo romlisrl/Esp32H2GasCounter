@@ -177,7 +177,7 @@ void save_counter_task(void *arg)
     while (true)
     {
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
-        led_on();
+        led_on(LED_COLOR_GREEN);
         uint64_t to_save_count = current_summation_delivered.high;
         to_save_count <<= 32;
         to_save_count |= current_summation_delivered.low;
@@ -592,7 +592,7 @@ void btn_task(void *arg)
         switch (state) {
             case PRESS:
                 ESP_LOGI(TAG, "Button press");
-                //led_on();
+                led_on(LED_COLOR_BLUE);
                 xEventGroupSetBits(main_event_group_handle, SHALL_ENABLE_ZIGBEE);
                 #ifdef FEATURE_DEEP_SLEEP
                 if (deep_sleep_task_handle != NULL)
@@ -604,12 +604,15 @@ void btn_task(void *arg)
                     deep_sleep_gracie_period.tv_sec += (TIME_TO_SLEEP_ZIGBEE_STARTING / 1000);
                 }
                 #endif
+                vTaskDelay(pdMS_TO_TICKS(50)); 
+                led_off();
                 break;
             case RELEASE:
                 ESP_LOGI(TAG, "Button release");
                 break;
             case SINGLE_CLICK:
                 ESP_LOGI(TAG, "Single click detected");
+                led_on(LED_COLOR_BLUE);
                 xEventGroupSetBits(report_event_group_handle,
                     CURRENT_SUMMATION_DELIVERED_REPORT | 
                     #ifdef FEATURE_MEASURE_BATTERY_LEVEL
@@ -625,6 +628,8 @@ void btn_task(void *arg)
                 // reset button state
                 button_state = NONE;
                 xTaskNotify(btn_task_handle, button_state, eSetValueWithOverwrite);
+                vTaskDelay(pdMS_TO_TICKS(50)); 
+                led_off();
                 break;
             case DOUBLE_CLICK:
                 ESP_LOGI(TAG, "Double click detected");
@@ -639,7 +644,10 @@ void btn_task(void *arg)
                 break;
             case HOLD:
                 ESP_LOGI(TAG, "Hold detected");
+                led_on(LED_COLOR_YELLOW);
                 leave_action();
+                vTaskDelay(pdMS_TO_TICKS(50)); 
+                led_off();
                 break;
             case NONE:
                 ESP_LOGI(TAG, "Button state reset");

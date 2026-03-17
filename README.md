@@ -99,11 +99,16 @@ idf.py menuconfig
 idf.py build flash monitor
 ```
 
-### 2️⃣ Using a pre-built binary (flash_project.bin)
+### 2️⃣ Using a pre-built binary (firmware.bin)
 ```bash
 # Connect the board to the UART port (example: COM10 on Windows)
 esptool.py --chip esp32h2 --port COM10 write_flash 0x0 firmware.bin
 ```
+### 3️⃣ Using [ESPHome Web](https://web.esphome.io/) (firmware.bin)
+
+- Connect the board via USB/UART  
+- Select your firmware.bin file  
+- Flash it directly from the browser  
 
 ---
 
