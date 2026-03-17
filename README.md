@@ -101,7 +101,7 @@ Connect the board to the UART port (example: COM10 on Windows)
 ### 3️⃣ Using [ESPHome Web](https://web.esphome.io/) (firmware.bin)  
 
 - Connect the board via USB/UART  
-- Select your firmware.bin file  
+- Select firmware.bin file  
 - Flash it directly from the browser  
 
 ---
