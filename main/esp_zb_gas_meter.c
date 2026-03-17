@@ -834,8 +834,30 @@ void enter_deep_sleep_cb(TimerHandle_t xTimer)
         ESP_LOGI(TAG, "Entering deep sleep cancelled");
         return;
     }
+
+    // to avoid continuously waking up from the pulse pin if it is stuck in LOW state.
+    int pulse_level = gpio_get_level(PULSE_PIN);
+    exception_pulse_button_on_hold = (pulse_level == 0);
+
+    const uint64_t gpio_pulse_pin_mask  = BIT(PULSE_PIN);
+    const uint64_t gpio_mainbtn_pin_mask = BIT(MAIN_BTN);
+
+    if (exception_pulse_button_on_hold) {
+        // Pin stacked on LOW:
+        // - MAIN_BTN wake-up on LOW (button)
+        // - PULSE_PIN wake-up on HIGH (open circuit)
+        ESP_LOGW(TAG, "PULSE_PIN stuck LOW, waiting for release");
+        ESP_ERROR_CHECK(esp_sleep_enable_ext1_wakeup(
+            gpio_mainbtn_pin_mask, ESP_EXT1_WAKEUP_ANY_LOW));
+        ESP_ERROR_CHECK(esp_sleep_enable_ext1_wakeup(
+            gpio_pulse_pin_mask, ESP_EXT1_WAKEUP_ANY_HIGH));
+    } else {
+        ESP_ERROR_CHECK(esp_sleep_enable_ext1_wakeup(
+            gpio_mainbtn_pin_mask | gpio_pulse_pin_mask, ESP_EXT1_WAKEUP_ANY_LOW));
+    }
+
     ESP_LOGI(TAG, "Entering deep sleep");
-    exception_pulse_button_on_hold = gpio_get_level(PULSE_PIN) == 0; // for interrupt to GND changed to 0
+    //exception_pulse_button_on_hold = gpio_get_level(PULSE_PIN) == 0; // for interrupt to GND changed to 0
     gettimeofday(&sleep_enter_time, NULL);
     esp_deep_sleep_start();
 }
