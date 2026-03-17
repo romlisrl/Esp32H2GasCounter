@@ -187,9 +187,10 @@ void save_counter_task(void *arg)
     {
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
         led_on(LED_COLOR_GREEN);
-        uint64_t to_save_count = current_summation_delivered.high;
-        to_save_count <<= 32;
-        to_save_count |= current_summation_delivered.low;
+        //uint64_t to_save_count = current_summation_delivered.high;
+        //to_save_count <<= 32;
+        //to_save_count |= current_summation_delivered.low;
+        uint64_t to_save_count = summation_to_u64(&current_summation_delivered);
         esp_err_t err = nvs_set_u64(my_nvs_handle, NVS_KEY, to_save_count);
         if (err == ESP_OK)
         {
@@ -221,9 +222,7 @@ esp_err_t gm_counter_set(const esp_zb_uint48_t *new_value)
 {
     current_summation_delivered.low = new_value->low;
     current_summation_delivered.high = new_value->high;
-    uint64_t current_summation_64 = current_summation_delivered.high;
-    current_summation_64 <<= 32;
-    current_summation_64 |= current_summation_delivered.low;
+    //uint64_t current_summation_64 = summation_to_u64(&current_summation_delivered); // not used any more
     xEventGroupSetBits(report_event_group_handle, CURRENT_SUMMATION_DELIVERED_REPORT);
     xTaskNotifyGive(save_counter_task_handle);
     return ESP_OK;
@@ -276,10 +275,11 @@ void check_shall_enable_radio()
             (time_diff_ms(&last_report_sent_time) / 1000 >= MUST_SYNC_MINIMUM_TIME);
         if (!enable_radio && last_summation_sent > 0)
         {
-            uint64_t current_summation_64 = current_summation_delivered.high;
-            current_summation_64 <<= 32;
-            current_summation_64 |= current_summation_delivered.low;
-            enable_radio = current_summation_64 - last_summation_sent >= COUNTER_REPORT_DIFF;
+            // uint64_t current_summation_64 = current_summation_delivered.high;
+            // current_summation_64 <<= 32;
+            // current_summation_64 |= current_summation_delivered.low;
+            // enable_radio = current_summation_64 - last_summation_sent >= COUNTER_REPORT_DIFF;
+            enable_radio = summation_to_u64(&current_summation_delivered) - last_summation_sent >= COUNTER_REPORT_DIFF;
         }
         if (enable_radio)
         {
@@ -380,9 +380,7 @@ void gm_counter_increment(bool fromISR)
     {
         current_summation_delivered.high += 1;
     }
-    uint64_t current_summation_64 = current_summation_delivered.high;
-    current_summation_64 <<= 32;
-    current_summation_64 |= current_summation_delivered.low;
+    //uint64_t current_summation_64 = summation_to_u64(&current_summation_delivered); // not used any more
     if (fromISR)
     {
         BaseType_t mustYield = pdFALSE;

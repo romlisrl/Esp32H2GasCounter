@@ -137,4 +137,8 @@ int32_t time_diff_ms(const struct timeval *other);
 
 #define COUNTER_INCREMENT_DEBOUNCE_TIME	3000 // milliseconds, blocks gas counter to increment the value for this period of time
 
+static inline uint64_t summation_to_u64(const esp_zb_uint48_t *s) {
+    return ((uint64_t)s->high << 32) | s->low;
+}
+
 #endif // ESP_ZB_GAS_METER_H
