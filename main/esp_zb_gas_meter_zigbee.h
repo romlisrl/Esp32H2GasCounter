@@ -5,7 +5,9 @@
 #include "zcl/esp_zigbee_zcl_metering.h"
 
 // Initial value for the counter 2134 will be 21.34 m3
-#define INITIAL_COUNTER_VALUE 0
+#ifndef INITIAL_COUNTER_VALUE
+#define INITIAL_COUNTER_VALUE 5532
+#endif
 
 // Maximum time to force a device report
 #define MUST_SYNC_MINIMUM_TIME          UINT16_C(60 * 60) // 60 minutes in seconds

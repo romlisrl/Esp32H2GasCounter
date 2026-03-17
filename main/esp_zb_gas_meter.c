@@ -163,8 +163,17 @@ esp_err_t gm_counter_load_nvs()
         //         current_summation_delivered.low, current_summation_delivered.high);
         ESP_LOGI(TAG, "Counter loaded value=%lu", current_summation_delivered.low);
     } else if (err == ESP_ERR_NVS_NOT_FOUND) {
-        ESP_LOGI(TAG, "Counter value not found in memory, starting from 0");
-        err = ESP_OK;
+        #ifdef INITIAL_COUNTER_VALUE
+            ESP_LOGI(TAG, "Counter not found, initializing to %d", INITIAL_COUNTER_VALUE);
+            current_summation_delivered.low  = INITIAL_COUNTER_VALUE;
+            current_summation_delivered.high = 0;
+            uint64_t init_count = (uint64_t)INITIAL_COUNTER_VALUE;
+            err = nvs_set_u64(my_nvs_handle, NVS_KEY, init_count);
+            if (err == ESP_OK) nvs_commit(my_nvs_handle);
+        #else
+            ESP_LOGI(TAG, "Counter value not found in memory, starting from 0");
+            err = ESP_OK;
+        #endif
     } else {
         ESP_LOGE(TAG, "Error reading NVS: %s", esp_err_to_name(err));
     }
