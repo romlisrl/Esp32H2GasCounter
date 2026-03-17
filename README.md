@@ -96,7 +96,7 @@ GAS_COUNTER: Enabling wake-up timer , 162s
 ---
 ## ⚡ Installation  
 
-### ⚠️ Don't forget to create an [external convert](./zigbee2mqtt/) in Zigbee2MQTT first!  
+### ⚠️ Don't forget to create an [external converter](./zigbee2mqtt/) in Zigbee2MQTT first!  
 
 ### 1️⃣ Using ESP-IDF (recommended)  
 
