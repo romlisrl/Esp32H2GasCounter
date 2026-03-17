@@ -6,7 +6,7 @@
 
 // Initial value for the counter 2134 will be 21.34 m3
 #ifndef INITIAL_COUNTER_VALUE
-#define INITIAL_COUNTER_VALUE 5532
+#define INITIAL_COUNTER_VALUE 0
 #endif
 
 // Maximum time to force a device report

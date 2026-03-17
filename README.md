@@ -7,7 +7,7 @@
 
 ---
 
-## Features
+## ✨ Features
 
 - Counts pulses from a meter using a reed sensor connected to a GPIO and GND pin. 
 - Stores pulse count in **non-volatile memory (NVS)**.  
@@ -20,23 +20,22 @@
 
 ---
 
-## Hardware
+## 🔧 Hardware
 
 - ESP32-H2-DevKitM-1 board (Aliexpress)  
 - Gas meter with pulse output (e.g., BK-G4MT, G16-U25 Honeywell or similar)  
 - Reed sensor: **Normally Open (NO)** – tested with GPS-01 Reed Switch 4×18 (Aliexpress)
-- Optional battery  
+- Optional battery power supply  
 
 ---
 
-## Software Requirements
+## 📦 Requirements
 
-- **ESP-IDF** v5.x  
-- **Zigbee2MQTT** external converter  
+- **Zigbee2MQTT** with external converter configured  
 
 ---
 
-## Wiring Example
+## 🔌 Wiring Example
 
 | ESP32H2 Pin | Connection                                     |
 |------------|------------------------------------------------|
@@ -50,7 +49,7 @@
 
 ---
 
-## Configuration
+## ⚙️ Configuration
 
 | Parameter                  | Description                                                    |
 |----------------------------|----------------------------------------------------------------|
@@ -60,7 +59,7 @@
 
 ---
 
-## How It Works
+## 🚀 How It Works
 
 1. ESP32H2 counts pulses from the meter.  
 2. Pulses are stored in **NVS flash** to survive reboots or deep sleep.  
@@ -69,7 +68,7 @@
 
 ---
 
-## Example Logs
+## 📟 Example Logs
 
 ```text
 GAS_COUNTER: Counter loaded value=160
@@ -82,9 +81,9 @@ GAS_COUNTER: Enabling wake-up timer , 162s
 ```
 
 ---
-## Installation  
+## ⚡ Installation  
 
-### > ⚠️ Don't forget to create an [external convert](./zigbee2mqtt/) in Zigbee2MQTT first!  
+### ⚠️ Don't forget to create an [external convert](./zigbee2mqtt/) in Zigbee2MQTT first!  
 
 ### 1️⃣ Using ESP-IDF (recommended)  
 
@@ -106,8 +105,7 @@ Connect the board to the UART port (example: COM10 on Windows)
 
 ---
 
-## Notes
+## 📝 Notes
 
-Make sure the Zigbee coordinator is running and paired.  
-Configure Zigbee2MQTT to match firmware endpoint and cluster IDs.  
-Optimized for battery-operated, low-power operation. 
+- Make sure the Zigbee coordinator is running and **permit join is enabled**
+- After modifying the external converter, **restart Zigbee2MQTT completely** (do not use *Settings → Tools → Restart Zigbee2MQTT*)
