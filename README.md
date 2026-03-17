@@ -1,4 +1,6 @@
 [![Buy Me a Coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://buymeacoffee.com/romlis)
+![ESP-IDF](https://img.shields.io/badge/ESP--IDF-v5.x-blue)
+![Zigbee](https://img.shields.io/badge/Zigbee-IEEE802.15.4-green)
 # ESP32H2 Gas Counter with Zigbee2MQTT
 
 **ESP32H2-based pulse counter** that measures pulses from utility meters with magnetic impulse output and sends them to **Zigbee2MQTT**.  
