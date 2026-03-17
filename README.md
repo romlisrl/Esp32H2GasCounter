@@ -102,7 +102,7 @@ idf.py build flash monitor
 ### 2️⃣ Using a pre-built binary (flash_project.bin)
 ```bash
 # Connect the board to the UART port (example: COM10 on Windows)
-esptool.py --chip esp32h2 --port COM10 write_flash 0x0 flash_project.bin
+esptool.py --chip esp32h2 --port COM10 write_flash 0x0 firmware.bin
 ```
 
 ---
