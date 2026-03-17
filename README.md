@@ -84,8 +84,9 @@ GAS_COUNTER: Enabling wake-up timer , 162s
 ---
 ## Installation  
 
-### 1️⃣ Using ESP-IDF (recommended)  
+### > ⚠️ Don't forget to create [external convert](./zigbee2mqtt/) in Zigbee2MQTT first!  
 
+### 1️⃣ Using ESP-IDF (recommended)  
 ```bash
 # Clone the repository
 git clone https://github.com/romlisrl/Esp32H2GasCounter
@@ -99,8 +100,6 @@ idf.py build flash monitor
 ```
 
 ### 2️⃣ Using a pre-built binary (flash_project.bin)
-
-> ⚠️ Don't forget to create external convert in Zigbee2MQTT first!  
 ```bash
 # Connect the board to the UART port (example: COM10 on Windows)
 esptool.py --chip esp32h2 --port COM10 write_flash 0x0 flash_project.bin
