@@ -43,6 +43,7 @@
 ---
 
 ## 🔧 Hardware
+<img src="./images/esp32-h2-devkitm1-pinlayout.png" width="400" alt="ESP32-H2 DevKitM-1 Pinout" />  
 
 - ESP32-H2-DevKitM-1 board (Aliexpress)  
 - Gas meter with pulse output (e.g., BK-G4MT, G16-U25 Honeywell or similar)  
@@ -67,7 +68,7 @@
 | GND        | -3.3V                                           |
 |            |                                                 |
 
-<img src="./images/esp32-h2-devkitm1-pinlayout.png" width="400" alt="ESP32-H2 DevKitM-1 Pinout" />
+<img src="./images/esp32h2_wiring.png" width="400" alt="ESP32-H2 DevKitM-1 Wiring" />
 
 ---
 
