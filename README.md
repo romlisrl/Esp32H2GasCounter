@@ -60,13 +60,13 @@
 
 ## 🔌 Wiring Example
 
-| ESP32H2 Pin | Connection                                     |
-|------------|------------------------------------------------|
-| GPIO10     | Reed sensor signal                              |
-| GND        | Reed sensor GND                                 |
-| VBat(Vcc)  | +3.3V (check voltage with series resistor TBD)  |
-| GND        | -3.3V                                           |
-|            |                                                 |
+| ESP32H2 Pin | Connection           |
+|------------|-----------------------|
+| GPIO10     | Reed sensor signal    |
+| GND        | Reed sensor GND       |
+| VBat(Vcc)  | +3.3V                 |
+| GND        | -3.3V                 |
+|            |                       |
 
 <img src="./images/esp32h2_wiring.png" width="400" alt="ESP32-H2 DevKitM-1 Wiring" />
 
