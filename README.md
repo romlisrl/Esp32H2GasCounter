@@ -46,7 +46,7 @@
 <img src="./images/esp32-h2-devkitm1-pinlayout.png" width="400" alt="ESP32-H2 DevKitM-1 Pinout" />  
 
 - ESP32-H2-DevKitM-1 board (Aliexpress)  
-- Gas meter with pulse output (e.g., BK-G4MT, G16-U25 Honeywell or similar)  
+- Gas meter with pulse output (e.g., BK-G4MT, Honeywell BK-G6M or similar)  
 - Reed sensor: **Normally Open (NO)** – tested with GPS-01 Reed Switch 4×18 (Aliexpress)
 - Optional battery power supply  
 
