@@ -91,8 +91,8 @@ GAS_COUNTER: Enabling wake-up timer , 162s
 - >git clone https://github.com/romlisrl/Esp32H2GasCounter
 - >cd Esp32H2GasCounter
 - >idf.py erase-flash
-- idf.py menuconfig (optional)
-- >idf.py build flash monitor  
+- >idf.py menuconfig (optional)
+- >idf.py build flash monitor
 
 ### 2️⃣ Using a pre-built binary (firmware.bin)  
 Connect the board to the UART port (example: COM10 on Windows)  
