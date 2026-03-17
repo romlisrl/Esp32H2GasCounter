@@ -24,6 +24,7 @@
 
 - ESP32-H2 vBat pin works at **3.3V only**.  
 - **Do NOT** connect vBat pin directly to 5V.  
+- To reduce power consumption, the power LED may be removed (unsoldered).
 - Use a voltage regulator or voltage divider if needed.  
 - Can also be **powered from USB** (3.3V internally regulated).  
 
