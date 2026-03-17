@@ -88,10 +88,10 @@ GAS_COUNTER: Enabling wake-up timer , 162s
 
 ### 1️⃣ Using ESP-IDF (recommended)  
 
-- >git clone https://github.com/romlisrl/Esp32H2GasCounter  
-- >cd Esp32H2GasCounter  
-- >idf.py erase-flash  
-- idf.py menuconfig (optional)  
+- >git clone https://github.com/romlisrl/Esp32H2GasCounter
+- >cd Esp32H2GasCounter
+- >idf.py erase-flash
+- idf.py menuconfig (optional)
 - >idf.py build flash monitor  
 
 ### 2️⃣ Using a pre-built binary (firmware.bin)  
