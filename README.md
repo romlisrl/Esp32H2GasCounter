@@ -87,24 +87,18 @@ GAS_COUNTER: Enabling wake-up timer , 162s
 ### > ⚠️ Don't forget to create an [external convert](./zigbee2mqtt/) in Zigbee2MQTT first!  
 
 ### 1️⃣ Using ESP-IDF (recommended)  
-```bash
-# Clone the repository
-git clone https://github.com/romlisrl/Esp32H2GasCounter
-cd Esp32H2GasCounter
-# Erase flash completely before the first upload
-idf.py erase-flash
-# Configure the project (optional: partitions, Wi-Fi, OTA, etc.)
-idf.py menuconfig
-# Build and flash the project, and open the serial monitor
-idf.py build flash monitor
-```
 
-### 2️⃣ Using a pre-built binary (firmware.bin)
-```bash
-# Connect the board to the UART port (example: COM10 on Windows)
-esptool.py --chip esp32h2 --port COM10 write_flash 0x0 firmware.bin
-```
-### 3️⃣ Using [ESPHome Web](https://web.esphome.io/) (firmware.bin)
+- >git clone https://github.com/romlisrl/Esp32H2GasCounter  
+- >cd Esp32H2GasCounter  
+- >idf.py erase-flash  
+- idf.py menuconfig (optional)  
+- >idf.py build flash monitor  
+
+### 2️⃣ Using a pre-built binary (firmware.bin)  
+Connect the board to the UART port (example: COM10 on Windows)  
+>esptool.py --chip esp32h2 --port COM10 write_flash 0x0 firmware.bin  
+
+### 3️⃣ Using [ESPHome Web](https://web.esphome.io/) (firmware.bin)  
 
 - Connect the board via USB/UART  
 - Select your firmware.bin file  
