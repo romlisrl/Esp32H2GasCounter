@@ -119,7 +119,7 @@ GAS_COUNTER: Enabling wake-up timer , 162s
 - idf.py menuconfig (optional)
 - idf.py build flash
 
-### 2️⃣ Using a esptool.py (firmware.bin)  
+### 2️⃣ Using a [esptool.py](https://docs.espressif.com/projects/esptool/en/latest/esp32/installation.html) (firmware.bin)  
 Connect the board to the UART port (example: COM10 on Windows)  
 ```bash
 esptool.py --chip esp32h2 --port COM10 write_flash 0x0 firmware.bin  
