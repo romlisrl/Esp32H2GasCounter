@@ -20,6 +20,14 @@
 
 ---
 
+## ⚠️ Power Notes  
+
+- ESP32-H2 vBat pin works at 3.3V only.  
+- Do NOT connect vBat pin directly to 5V.  
+- Use a voltage regulator or voltage divider if needed.  
+
+---
+
 ## ✨ Features
 
 - Counts pulses from a meter using a reed sensor connected to a GPIO and GND pin. 
