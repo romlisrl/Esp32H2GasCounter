@@ -7,6 +7,16 @@
 
 ---
 
+## 🚀 Quick Start  
+
+1. Flash the firmware onto your ESP32-H2 board.  
+2. Copy [external convert](./zigbee2mqtt/) to Zigbee2MQTT (Settings->Dev console->External Converters).  
+3. Restart Zigbee2MQTT completely (full restart required).  
+4. Enable Zigbee pairing (**permit join**)  
+5. Power on the board or press the Boot button to send the first data packet.  
+
+---
+
 ## ✨ Features
 
 - Counts pulses from a meter using a reed sensor connected to a GPIO and GND pin. 
