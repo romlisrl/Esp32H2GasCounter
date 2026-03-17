@@ -33,9 +33,7 @@ void led_on(led_color_t color)
 				r = 20; g = 20; b = 20;
 				break;
             case LED_COLOR_YELLOW:
-				r = 20;
-				g = 20;
-				b = 20;
+				r = 20;	g = 20;
 				break;
             default:
 				g = 20;
@@ -52,6 +50,7 @@ void led_off()
 	led_state = OFF;
 	if (led_strip) {
 		led_strip_clear(led_strip);
+		//led_strip_refresh(led_strip);
 	}
 }
 
