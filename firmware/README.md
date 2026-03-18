@@ -2,7 +2,7 @@
 ![ESP-IDF](https://img.shields.io/badge/ESP--IDF-v5.x-blue)
 ![Zigbee](https://img.shields.io/badge/Zigbee-IEEE802.15.4-green)
 
-# ⚡ Installation firmware  
+# ⚡ Firmware installation  
 
 ## ⚠️ Don't forget to create an [external converter](./zigbee2mqtt/) in Zigbee2MQTT first!  
 
