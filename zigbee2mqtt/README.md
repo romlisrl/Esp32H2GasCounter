@@ -13,7 +13,7 @@ This custom converter enables full support for the Esp32GasMeter (based on ESP32
 * Open your Zigbee2MQTT Web Interface.  
 * Navigate to Settings -> Dev Console -> External Converters.  
 * In the section "Select converter to edit", leave it as N/A - Create new converter.  
-  Name : gas_meter.js  
+  Name : micasa.js  
   Code : Paste the entire content of the micasa.js file from this repository.  
 * Click Save and then Restart Zigbee2MQTT.  
 
