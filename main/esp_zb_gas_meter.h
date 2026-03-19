@@ -1,8 +1,8 @@
 #ifndef ESP_ZB_GAS_METER_H
 #define ESP_ZB_GAS_METER_H
 
-#define ESP_MANUFACTURER_NAME           "\x0E""Custom devices"
-#define ESP_MODEL_IDENTIFIER            "\x11""ESP32H2GasCounter" /* Customized model identifier */
+#define ESP_MANUFACTURER_NAME           "\x14""Custom devices (DiY)"
+#define ESP_MODEL_IDENTIFIER            "\x10""MiCASAGasCounter" /* Customized model identifier */
 #define ESP_DATE_CODE                   "\x08""20260301"
 #define ESP_PRODUCT_URL                 "\x2C""https://github.com/romlisrl/ZigbeeGasCounter"
 #define ESP_PRODUCT_CODE                "\x00"
@@ -19,7 +19,7 @@
 // define if the device is powered from batteries and you want the device to
 // measure the battery voltage. Note battery voltage is not reportable. Use the GUI
 // refresh button to obtain the latest measured value from the device.
-//#define FEATURE_MEASURE_BATTERY_LEVEL
+#define FEATURE_MEASURE_BATTERY_LEVEL
 
 // Decide if you are going to use DEEP_SLEEP or LIGHT_SLEEP. Only one can be 
 // defined. It is possible also to disable both in case the unit is not battery
@@ -67,15 +67,15 @@
 // WARNING: GPIO_NUM_21 is in the SPI flash range (GPIO15-21) on ESP32H2 and
 // is NOT recommended for general use. If you ever wire something to BAT_MON_ENABLE,
 // change this to a safe pin (e.g. GPIO_NUM_11 or GPIO_NUM_12).
-#define BAT_MON_ENABLE                                          GPIO_NUM_11
+#define BAT_MON_ENABLE                                          GPIO_NUM_22
 
 // ESP32H2 does NOT have an ADC peripheral — emit a hard error if someone
 // accidentally enables battery measurement on this target.
-#ifdef CONFIG_IDF_TARGET_ESP32H2
-  #ifdef FEATURE_MEASURE_BATTERY_LEVEL
-    #error "FEATURE_MEASURE_BATTERY_LEVEL is not supported on ESP32H2 (no ADC). Comment out that #define."
-  #endif
-#endif
+//#ifdef CONFIG_IDF_TARGET_ESP32H2
+//  #ifdef FEATURE_MEASURE_BATTERY_LEVEL
+//    #error "FEATURE_MEASURE_BATTERY_LEVEL is not supported on ESP32H2 (no ADC). Comment out that #define."
+//  #endif
+//#endif
 
 #ifdef FEATURE_MEASURE_BATTERY_LEVEL
 #define ADC_CHANNEL                                             ADC_CHANNEL_2

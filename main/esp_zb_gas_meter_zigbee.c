@@ -254,6 +254,31 @@ esp_zb_zcl_status_t zb_radio_setup_report_values(EventBits_t uxBits)
 #endif
 #ifdef FEATURE_MEASURE_BATTERY_LEVEL
     if ((uxBits & BATTERY_REPORT) == BATTERY_REPORT) {
+        // In deep sleep mode the coordinator polls battery attributes via read,
+        // so we only need set_attribute_val (done in zb_radio_setup_report_values).
+        // Calling report_attr_cmd_req here would crash because Power Config attrs
+        // are not registered for reporting (no REPORTING access flag).
+        #ifndef FEATURE_DEEP_SLEEP
+        report_attr_cmd.clusterID = ESP_ZB_ZCL_CLUSTER_ID_POWER_CONFIG;
+        report_attr_cmd.attributeID = ESP_ZB_ZCL_ATTR_POWER_CONFIG_BATTERY_PERCENTAGE_REMAINING_ID;
+        status = esp_zb_zcl_report_attr_cmd_req(&report_attr_cmd);
+        if (status != ESP_ZB_ZCL_STATUS_SUCCESS) {
+            ESP_LOGE(TAG, "Sending report value of battery percentage remaining: 0x%04x", status);
+            return status;
+        }
+        ESP_LOGI(TAG, "BatteryPercentageRemaining reported");
+        report_attr_cmd.clusterID = ESP_ZB_ZCL_CLUSTER_ID_POWER_CONFIG;
+        report_attr_cmd.attributeID = ESP_ZB_ZCL_ATTR_POWER_CONFIG_BATTERY_ALARM_STATE_ID;
+        status = esp_zb_zcl_report_attr_cmd_req(&report_attr_cmd);
+        if (status != ESP_ZB_ZCL_STATUS_SUCCESS) {
+            ESP_LOGE(TAG, "Sending report value of battery alarm state: 0x%04x", status);
+            return status;
+        }
+        ESP_LOGI(TAG, "BatteryAlarmState reported");
+        #else
+        ESP_LOGI(TAG, "Battery values set, coordinator will read on next poll");
+        #endif
+        
         status = esp_zb_zcl_set_attribute_val(MY_METERING_ENDPOINT,
             ESP_ZB_ZCL_CLUSTER_ID_POWER_CONFIG, ESP_ZB_ZCL_CLUSTER_SERVER_ROLE,
             ESP_ZB_ZCL_ATTR_POWER_CONFIG_BATTERY_PERCENTAGE_REMAINING_ID, &battery_percentage, false);
@@ -275,8 +300,10 @@ esp_zb_zcl_status_t zb_radio_setup_report_values(EventBits_t uxBits)
             ESP_LOGE(TAG, "Updating value of battery alarm state: 0x%04x", status);
             return status;
         }
+            
     }
 #endif
+    /*
     if ((uxBits & STATUS_REPORT) == STATUS_REPORT) {
         status = esp_zb_zcl_set_attribute_val(MY_METERING_ENDPOINT,
             ESP_ZB_ZCL_CLUSTER_ID_METERING, ESP_ZB_ZCL_CLUSTER_SERVER_ROLE,
@@ -295,6 +322,34 @@ esp_zb_zcl_status_t zb_radio_setup_report_values(EventBits_t uxBits)
             return status;
         }
     }
+    */
+
+        #ifndef FEATURE_DEEP_SLEEP
+    if ((uxBits & STATUS_REPORT) == STATUS_REPORT) {
+        report_attr_cmd.clusterID = ESP_ZB_ZCL_CLUSTER_ID_METERING;
+        report_attr_cmd.attributeID = ESP_ZB_ZCL_ATTR_METERING_STATUS_ID;
+        status = esp_zb_zcl_report_attr_cmd_req(&report_attr_cmd);
+        if (status != ESP_ZB_ZCL_STATUS_SUCCESS) {
+            ESP_LOGE(TAG, "Sending report value of metering status: 0x%04x", status);
+            return status;
+        }
+        ESP_LOGI(TAG, "Status reported");
+    }
+
+    if ((uxBits & EXTENDED_STATUS_REPORT) == EXTENDED_STATUS_REPORT) {
+        report_attr_cmd.clusterID = ESP_ZB_ZCL_CLUSTER_ID_METERING;
+        report_attr_cmd.attributeID = ESP_ZB_ZCL_ATTR_METERING_EXTENDED_STATUS_ID;
+        status = esp_zb_zcl_report_attr_cmd_req(&report_attr_cmd);
+        if (status != ESP_ZB_ZCL_STATUS_SUCCESS) {
+            ESP_LOGE(TAG, "Sending report value of metering extended status: 0x%04x", status);
+            return status;
+        }
+        ESP_LOGI(TAG, "ExtendedStatus reported");
+    }
+    #else
+    ESP_LOGI(TAG, "Status/ExtendedStatus values set, coordinator will read on next poll");
+    #endif
+
     return status;
 }
 
@@ -332,6 +387,7 @@ esp_zb_zcl_status_t zb_radio_send_values(EventBits_t uxBits)
         ESP_LOGI(TAG, "InstantaneousDemand reported");
     }
     #endif
+    #ifndef FEATURE_DEEP_SLEEP
     #ifdef FEATURE_MEASURE_BATTERY_LEVEL
     if ((uxBits & BATTERY_REPORT) == BATTERY_REPORT) {
         report_attr_cmd.clusterID = ESP_ZB_ZCL_CLUSTER_ID_POWER_CONFIG;
@@ -374,7 +430,7 @@ esp_zb_zcl_status_t zb_radio_send_values(EventBits_t uxBits)
         }
         ESP_LOGI(TAG, "ExtendedStatus reported");
     }
-
+    #endif // FEATURE_DEEP_SLEEP
     return status;
 }
 
@@ -538,7 +594,7 @@ void esp_zb_task(void *pvParameters)
     };
     esp_zb_attribute_list_t *esp_zb_identify_cluster = esp_zb_identify_cluster_create(&identify_cfg);
 
-    /* power cluster - commented out because ESP32H2
+    // power cluster - commented out because ESP32H2
     #ifdef FEATURE_MEASURE_BATTERY_LEVEL
     esp_zb_power_config_cluster_cfg_t power_cfg = {
         .main_voltage = 0,
@@ -582,7 +638,6 @@ void esp_zb_task(void *pvParameters)
                                         ESP_ZB_ZCL_ATTR_POWER_CONFIG_BATTERY_QUANTITY_ID,
                                         &battery_quantity));
     #endif
-    */
 
     /* metering cluster */
 
@@ -612,7 +667,7 @@ void esp_zb_task(void *pvParameters)
                                         ESP_ZB_ZCL_CLUSTER_ID_METERING,
                                         ESP_ZB_ZCL_ATTR_METERING_STATUS_ID,
                                         ESP_ZB_ZCL_ATTR_TYPE_8BITMAP,  // Type uint8_t
-                                        ESP_ZB_ZCL_ATTR_ACCESS_READ_ONLY | ESP_ZB_ZCL_ATTR_ACCESS_REPORTING,
+                                        ESP_ZB_ZCL_ATTR_ACCESS_READ_ONLY,
                                         &device_status));
 
     ESP_ERROR_CHECK(esp_zb_cluster_add_attr(esp_zb_metering_server_cluster,
@@ -640,7 +695,7 @@ void esp_zb_task(void *pvParameters)
                                         ESP_ZB_ZCL_CLUSTER_ID_METERING,
                                         ESP_ZB_ZCL_ATTR_METERING_EXTENDED_STATUS_ID,
                                         ESP_ZB_ZCL_ATTR_TYPE_64BITMAP,  // Type uint64_t
-                                        ESP_ZB_ZCL_ATTR_ACCESS_READ_ONLY | ESP_ZB_ZCL_ATTR_ACCESS_REPORTING,
+                                        ESP_ZB_ZCL_ATTR_ACCESS_READ_ONLY,
                                         &device_extended_status));
 
     // Multiplier attribute
@@ -709,11 +764,11 @@ void esp_zb_task(void *pvParameters)
     ESP_ERROR_CHECK(esp_zb_cluster_list_add_identify_cluster(esp_zb_meter_cluster_list, esp_zb_identify_cluster, ESP_ZB_ZCL_CLUSTER_SERVER_ROLE));
     ESP_ERROR_CHECK(esp_zb_cluster_list_add_identify_cluster(esp_zb_meter_cluster_list, esp_zb_identify_client_cluster, ESP_ZB_ZCL_CLUSTER_CLIENT_ROLE));
     ESP_ERROR_CHECK(esp_zb_cluster_list_add_metering_cluster(esp_zb_meter_cluster_list, esp_zb_metering_server_cluster, ESP_ZB_ZCL_CLUSTER_SERVER_ROLE));
-    /* - commented out because ESP32H2 doesn't support power cluster, need to enable when it's supported
+    // - commented out because ESP32H2 doesn't support power cluster, need to enable when it's supported
     #ifdef FEATURE_MEASURE_BATTERY_LEVEL
     ESP_ERROR_CHECK(esp_zb_cluster_list_add_power_config_cluster(esp_zb_meter_cluster_list, esp_zb_power_cluster, ESP_ZB_ZCL_CLUSTER_SERVER_ROLE));
     #endif
-    */
+    
     ESP_ERROR_CHECK(esp_zb_cluster_list_add_ota_cluster(esp_zb_meter_cluster_list, esp_zb_ota_cluster, ESP_ZB_ZCL_CLUSTER_CLIENT_ROLE));
 
     esp_zb_ep_list_t *esp_zb_ep_meter_list = esp_zb_ep_list_create();
@@ -751,7 +806,7 @@ void esp_zb_task(void *pvParameters)
     ESP_ERROR_CHECK(esp_zb_zcl_start_attr_reporting(instantaneous_demand_location_info));
     ESP_ERROR_CHECK(update_reporting(&instantaneous_demand_location_info, 0));
     #endif
-
+/*
     #ifdef FEATURE_MEASURE_BATTERY_LEVEL
     esp_zb_zcl_attr_location_info_t  percentage_location_info = {
         .attr_id = ESP_ZB_ZCL_ATTR_POWER_CONFIG_BATTERY_PERCENTAGE_REMAINING_ID,
@@ -773,7 +828,9 @@ void esp_zb_task(void *pvParameters)
     ESP_ERROR_CHECK(esp_zb_zcl_start_attr_reporting(battery_alarm_state_location_info));
     ESP_ERROR_CHECK(update_reporting(&battery_alarm_state_location_info, 0));
     #endif
+    */
 
+    #ifndef FEATURE_DEEP_SLEEP
     esp_zb_zcl_attr_location_info_t status_location_info = {
         .attr_id = ESP_ZB_ZCL_ATTR_METERING_STATUS_ID,
         .cluster_id = ESP_ZB_ZCL_CLUSTER_ID_METERING,
@@ -793,6 +850,7 @@ void esp_zb_task(void *pvParameters)
     };
     ESP_ERROR_CHECK(esp_zb_zcl_start_attr_reporting(extended_status_location_info));
     ESP_ERROR_CHECK(update_reporting(&extended_status_location_info, 0));
+    #endif
 
     esp_zb_set_tx_power(IEEE802154_TXPOWER_INDEX_MIN);
     ESP_ERROR_CHECK(esp_zb_set_primary_network_channel_set(ESP_ZB_PRIMARY_CHANNEL_MASK));

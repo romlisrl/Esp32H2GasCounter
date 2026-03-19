@@ -32,6 +32,7 @@
 
 ## ✨ Features
 <img src="./images/Zigbee2MQTT.png" width="400" alt="Zigbee2MQTT" />  
+
 - Counts pulses from a meter using a reed sensor connected to a GPIO and GND pin. 
 - Stores pulse count in **non-volatile memory (NVS)**.  
 - Sends data to **Zigbee2MQTT**:  
@@ -116,20 +117,29 @@ GAS_COUNTER: Enabling wake-up timer , 162s
 
 - git clone https://github.com/romlisrl/Esp32H2GasCounter
 - cd Esp32H2GasCounter
+- Set the desired configuration values
 - idf.py erase-flash
-- idf.py menuconfig  # optional
 - idf.py build flash
 
-### 2️⃣ Using [esptool.py](https://docs.espressif.com/projects/esptool/en/latest/esp32/installation.html) (firmware.bin)  
-Connect the board to the UART port (example: COM10 on Windows)  
+### 2️⃣ Using [esptool.py](https://docs.espressif.com/projects/esptool/en/latest/esp32/installation.html) (firmware_batmon.bin/firmware_wo_batmon.bin)  
+
+- Connect the board to a UART port (e.g., COM10 on Windows)  
+
+**With battery monitor:**  
 ```bash
-esptool.py --chip esp32h2 --port COM10 write_flash 0x0 firmware.bin  
+esptool.py --chip esp32h2 --port COM10 write_flash 0x0 firmware_batmon.bin  
+```
+**Without battery monitor:**
+```bash
+esptool.py --chip esp32h2 --port COM10 write_flash 0x0 firmware_wo_batmon.bin  
 ```
 
-### 3️⃣ Using [ESPHome Web](https://web.esphome.io/) (firmware.bin)  
+### 3️⃣ Using [ESPHome Web](https://web.esphome.io/) (firmware_batmon.bin/firmware_wo_batmon.bin)  
 
 - Connect the board via USB/UART  
-- Select firmware.bin file  
+- Select the firmware file:
+  - `firmware_batmon.bin` (with battery monitor)
+  - `firmware_wo_batmon.bin` (without battery monitor) 
 - Flash it directly from the browser  
 
 ---
@@ -138,8 +148,8 @@ esptool.py --chip esp32h2 --port COM10 write_flash 0x0 firmware.bin
 
 The following tasks are planned or pending implementation:
 
-- [ ] **Implement battery voltage measurement via voltage divider on GPIO3** — include ADC reading and calibration.  
-- [ ] **Add configuration for voltage divider parameters** (scaling factor, low-battery thresholds).  
+- [х] **Implement battery voltage measurement via voltage divider on GPIO3** — include ADC reading and calibration.  
+- [х] **Add configuration for voltage divider parameters** (scaling factor, low-battery thresholds).  
 
 ---
 

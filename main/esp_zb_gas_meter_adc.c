@@ -217,8 +217,13 @@ void adc_task(void *arg)
                     // convert to 1s li-ion range
                     float bat_voltage = (float)(voltage * (float)MAX_BATTERY_VOLTAGE / (float)ADC_MAX_VALUE); // battery voltage from adc readings in millivolts, range to 4200 mv
                     battery_voltage = (uint8_t)(bat_voltage/100.0+0.5); // Zigbee Specification, one byte, 0x00 to 0xff, in units of 100mv
-                    if (average < ADC_MIN_VALUE) average = ADC_MIN_VALUE; // avoid negative values for battery percentage
-                    battery_percentage = (uint8_t)(((double)average - ADC_MIN_VALUE)*TO_PERCENTAGE); // from 0 to 200
+                    //if (average < ADC_MIN_VALUE) average = ADC_MIN_VALUE; // avoid negative values for battery percentage
+                    //battery_percentage = (uint8_t)(((double)average - ADC_MIN_VALUE)*TO_PERCENTAGE); // from 0 to 200
+                    float adc_min = (float)MIN_BATTERY_VOLTAGE * (float)ADC_MAX_VALUE / (float)MAX_BATTERY_VOLTAGE;
+                    float pct = ((float)voltage - adc_min) / ((float)ADC_MAX_VALUE - adc_min) * 200.0f;
+                    if (pct < 0) pct = 0;
+                    if (pct > 200) pct = 200;
+                    battery_percentage = (uint8_t)pct;
                     EventBits_t shall_report = BATTERY_REPORT;
                     if (battery_percentage > 200) {
                         battery_percentage = 200;
