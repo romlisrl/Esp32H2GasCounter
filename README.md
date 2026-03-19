@@ -47,7 +47,7 @@
 ## 🔧 Hardware
 <img src="./images/esp32-h2-devkitm1-pinlayout.png" width="400" alt="ESP32-H2 DevKitM-1 Pinout" />  
 
-- [ESP32-H2-DevKitM-1 internal antenna](https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32h2/esp32-h2-devkitm-1/user_guide.html) board /4MB Flash/ (Aliexpress) / [ESP32-H2-DevKitM-1 external antenna](https://www.aliexpress.com/item/1005009421156166.html)  
+- [ESP32-H2-DevKitM-1 internal antenna](https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32h2/esp32-h2-devkitm-1/user_guide.html) / [ESP32-H2-DevKitM-1 external antenna](https://www.aliexpress.com/item/1005009421156166.html) board /4MB Flash/ (Aliexpress)   
 - Gas meter with pulse output (e.g., BK-G4MT, Honeywell BK-G6M or similar)  
 - [Reed sensor](https://www.aliexpress.com/item/1005007756163643.html): **Normally Open (NO)** – tested with GPS-01 Reed Switch 4×18 (Aliexpress)
 - [Battery power supply](https://www.aliexpress.com/item/1005010610966428.html) (supports USB-C power banks)  
