@@ -1,0 +1,2 @@
+python C:\esp\v5.5.3\esp-idf\components\nvs_flash\nvs_partition_generator\nvs_partition_gen.py generate nvs.csv nvs.bin 0x4000
+esptool.py --port COM10 --baud 460800 write_flash 0x9000 nvs.bin
