@@ -79,11 +79,20 @@
 
 ## ⚙️ Configuration
 
-| Parameter                  | Description                                                    |
-|----------------------------|----------------------------------------------------------------|
-| `MUST_SYNC_MINIMUM_TIME`   | Time between automatic transmissions (timer default 60m)       |
-| `COUNTER_REPORT_DIFF`      | Number of pulses to trigger immediate transmission (default 10)|
-| `INITIAL_COUNTER_VALUE`    | Initial value for the counter (2134 will be 21.34 m3)          |
+| Parameter                       | Description                                                    |
+|---------------------------------|----------------------------------------------------------------|
+| `PULSE_PIN`                     | GPIO pin connected to the reed sensor                          |
+| `MAIN_BTN`                      | GPIO used for the button                                       |
+| `MUST_SYNC_MINIMUM_TIME`        | Interval between automatic transmissions (default: 60 min)     |
+| `COUNTER_REPORT_DIFF`           | Number of pulses to trigger immediate transmission (default 10)|
+| `INITIAL_COUNTER_VALUE`         | Initial counter value (e.g., 2134 = 21.34 m³)                  |
+| `FEATURE_MEASURE_BATTERY_LEVEL` | Enable or disable battery voltage monitoring                   |
+| `ADC_CHANNEL_2`                 | GPIO pin used to measure voltage via a resistive divider       |
+| `RATED_BATTERY_VOLTAGE`         | Nominal battery voltage (as specified by the manufacturer)     |
+| `MAX_BATTERY_VOLTAGE`           | Maximum battery voltage                                        |
+| `MIN_BATTERY_VOLTAGE`           | Minimum battery voltage                                        |
+| `WARN_BATTERY_VOLTAGE`          | Battery voltage threshold for warning                          |
+| `ADC_MAX_VALUE`                 | Maximum ADC value (on GPIO pin used to measure ge)             |
 
 ---
 
