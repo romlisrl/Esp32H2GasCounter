@@ -92,7 +92,7 @@
 | `MAX_BATTERY_VOLTAGE`           | Maximum battery voltage                                        |
 | `MIN_BATTERY_VOLTAGE`           | Minimum battery voltage                                        |
 | `WARN_BATTERY_VOLTAGE`          | Battery voltage threshold for warning                          |
-| `ADC_MAX_VALUE`                 | Maximum ADC value (on GPIO pin used to measure ge)             |
+| `ADC_MAX_VALUE`                 | Maximum ADC value (on GPIO pin used to measure voltage)        |
 
 ---
 
