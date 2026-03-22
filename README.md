@@ -49,7 +49,7 @@
 
 - [ESP32-H2-DevKitM-1 internal antenna](https://www.aliexpress.com/item/1005008131868631.html) / [ESP32-H2-DevKitM-1 external antenna](https://www.aliexpress.com/item/1005009421156166.html) board /4MB Flash/ (Aliexpress)   
 - Gas meter with pulse output (e.g., BK-G4MT, Honeywell BK-G6M or similar)  
-- [Reed sensor (15AT is better)](https://www.aliexpress.com/item/1005007756163643.html): **Normally Open (NO)** – tested with GPS-01 Reed Switch 4×18 (Aliexpress)
+- [Reed sensor (10AT is better)](https://www.aliexpress.com/item/1005007756163643.html): **Normally Open (NO)** – tested with GPS-01 Reed Switch 4×18 /not quite sensetive/ (Aliexpress)
 - [Battery power supply](https://www.aliexpress.com/item/1005010610966428.html) (supports USB-C power banks)  
 
 ---
