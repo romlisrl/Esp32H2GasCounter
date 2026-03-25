@@ -70,7 +70,7 @@
 | GPIO10     | Reed sensor signal    |
 | GND        | Reed sensor GND       |
 | VBat(Vcc)  | +VDD (+3.3V)          |
-| GND        | -VDD (-3.3V)          |
+| GND        | GND (battery -)       |
 |            |                       |
 
 <img src="./images/esp32h2_wiring.png" width="400" alt="ESP32-H2 DevKitM-1 Wiring" />
