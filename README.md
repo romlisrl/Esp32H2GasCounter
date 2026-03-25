@@ -103,6 +103,19 @@
 3. When **timer expires** or **pulse threshold** is reached data is sent to **Zigbee2MQTT**.  
 4. Device enters **deep sleep** to save power until next event (pulse or timer).  
 
+## 🏠 Home Assistant Configuration
+
+To correctly interpret the counter values as gas consumption, create a Helper in Home Assistant Settings->Devices & services->Helpers->Create helper->Template->Sensor with the following parameters.
+> ⚠️ `5720.17` is the initial value of your utility meter.
+
+### 📊 Template
+```yaml
+Name: Gas meter
+State: {{ (states('sensor.0xf4ce3662f44a0e45_total_count') | float(0) * 0.01 + 5720.17) | round(2) }}
+Device class: Gas
+State class: Total increasing
+Unit of measurement: m³
+```
 ---
 
 ## 📟 Example Logs
