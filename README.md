@@ -106,12 +106,13 @@
 ## 🏠 Home Assistant Configuration
 
 To correctly interpret the counter values as gas consumption, create a Helper in Home Assistant **Settings → Devices & services → Helpers → Create helper → Template → Sensor** with the following parameters.
-> ⚠️ `5720.17` is the initial reading of your utility meter.
+>`5720.17` - is the initial reading of your utility meter.  
+>`sensor.0xf4ce3662f44a0e45_gas_count` - your sensor name
 
 ### 📊 Template
 ```yaml
 Name: Gas meter
-State: {{ (states('sensor.0xf4ce3662f44a0e45_total_count') | float(0) * 0.01 + 5720.17) | round(2) }}
+State: {{ (states('sensor.0xf4ce3662f44a0e45_gas_count') | float(0) * 0.01 + 5720.17) | round(2) }}
 Device class: Gas
 State class: Total increasing
 Unit of measurement: m³
