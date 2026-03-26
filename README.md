@@ -116,6 +116,7 @@ State: {{ (states('sensor.0xf4ce3662f44a0e45_gas_count') | float(0) * 0.01 + 572
 Device class: Gas
 State class: Total increasing
 Unit of measurement: m³
+Availability template: {{ has_value('sensor.0xf4ce3662f44a0e45_gas_count') }}
 ```
 ---
 
